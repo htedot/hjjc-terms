@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>环境监测 · 背术语</title>
+<style>
+:root{
+  --paper:#faf7f2; --ink:#1c1c1e; --gry:#6b6b70; --line:#ddd6cb;
+  --acc:#961e2d; --acc-l:#f3e3e4; --grn:#1f6b45; --grn-l:#e4efe7;
+  --blu:#22507a; --blu-l:#e3ecf4; --sand:#f2ece1;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
+  font-size:16px; line-height:1.65;
+  padding:18px 16px 40px; max-width:760px; margin:0 auto;
+}
+header{display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid var(--acc);padding-bottom:8px}
+h1{font-size:21px;margin:0;letter-spacing:.5px}
+h1 small{font-size:12px;color:var(--gry);font-weight:400;margin-left:6px;letter-spacing:0}
+#stat{margin-left:auto;font-size:12.5px;color:var(--gry);font-variant-numeric:tabular-nums}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:10px 0 14px}
+.bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .25s}
+
+.ctl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.chip{
+  font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);
+  background:#fff;color:var(--gry);cursor:pointer;user-select:none;transition:.15s;
+}
+.chip:hover{border-color:var(--acc);color:var(--acc)}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.chip.on.grn{background:var(--grn);border-color:var(--grn)}
+.chip.on.blu{background:var(--blu);border-color:var(--blu)}
+.sep{width:1px;background:var(--line);margin:2px 4px}
+
+#stage{
+  background:#fff;border:1px solid var(--line);border-radius:8px;
+  padding:26px 22px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -18px rgba(0,0,0,.35);
+}
+.qtag{font-size:11.5px;color:var(--gry);letter-spacing:.08em;margin-bottom:10px}
+.qtag b{color:var(--acc);font-weight:600}
+#front{font-size:30px;font-weight:650;line-height:1.35;letter-spacing:.5px;word-break:break-word}
+#front.en{font-size:27px;font-weight:600;font-family:Georgia,"Times New Roman",serif;letter-spacing:.2px}
+#sub{color:var(--gry);font-size:13.5px;margin-top:8px}
+#answer{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);display:none}
+#answer.show{display:block}
+#ansMain{font-size:26px;font-weight:600;font-family:Georgia,"Times New Roman",serif;color:var(--blu);word-break:break-word}
+#ansMain.zh{font-family:inherit;font-size:23px;color:var(--ink)}
+#ansNote{font-size:13.5px;color:var(--gry);margin-top:8px}
+.flag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;background:var(--sand);color:#8a6a2f;margin-left:8px;vertical-align:3px;font-family:inherit;font-weight:400}
+
+#acts{display:flex;gap:10px;margin-top:22px}
+button{font:inherit;cursor:pointer;border-radius:7px;border:1px solid var(--line);background:#fff;padding:11px 8px;flex:1;transition:.15s}
+button:hover{border-color:#bbb}
+button.main{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+button.main:hover{filter:brightness(1.07)}
+button.ok{background:var(--grn);border-color:var(--grn);color:#fff;font-weight:600}
+button.no{background:#fff;border-color:#c9b7b9;color:var(--acc);font-weight:600}
+button:disabled{opacity:.45;cursor:default}
+#hint{font-size:12px;color:var(--gry);margin-top:12px;text-align:center}
+#hint kbd{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 5px;color:#444}
+
+#quiz{display:none;flex-direction:column;gap:9px;margin-top:16px}
+#list{display:none;margin-top:6px;max-height:64vh;overflow:auto;-webkit-overflow-scrolling:touch}
+#list .row{display:grid;grid-template-columns:1fr;gap:2px;padding:7px 0;border-bottom:1px solid var(--line)}
+#list .rz{font-size:13px;color:var(--ink)}
+#list .re{font-size:13px;color:var(--acc);word-break:break-word}
+#list .rn{font-size:11.5px;color:var(--muted);line-height:1.5}
+#list .flag{margin-left:0;margin-right:4px}
+#list .lh{font-size:12px;color:var(--muted);padding:2px 0 6px}
+.opt{
+  text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:7px;background:#fff;
+  font-size:17px;font-family:Georgia,"Times New Roman",serif;line-height:1.4;
+}
+.opt:hover{border-color:var(--blu);background:var(--blu-l)}
+.opt.right{background:var(--grn-l);border-color:var(--grn);font-weight:600}
+.opt.wrong{background:var(--acc-l);border-color:var(--acc);text-decoration:line-through;opacity:.75}
+
+#type{display:none;margin-top:16px}
+#type input{
+  width:100%;font:inherit;font-size:19px;padding:11px 13px;border:1px solid var(--line);
+  border-radius:7px;background:#fff;font-family:Georgia,"Times New Roman",serif;
+}
+#type input:focus{outline:none;border-color:var(--blu);box-shadow:0 0 0 3px var(--blu-l)}
+#fb{margin-top:10px;font-size:14px;min-height:22px}
+#fb.good{color:var(--grn);font-weight:600}
+#fb.bad{color:var(--acc);font-weight:600}
+#end{display:none;text-align:center;padding:30px 10px}
+#end h2{font-size:20px;margin:0 0 6px}
+#end p{color:var(--gry);font-size:14px}
+@media (max-width:520px){
+  body{padding:14px 12px 34px}
+  #front{font-size:25px} #ansMain{font-size:22px}
+  #stage{padding:20px 16px;min-height:220px}
+  .chip{font-size:12.5px;padding:3px 9px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>环境监测 · 背术语<small>双语 120 条</small></h1>
+  <div id="stat"></div>
+</header>
+<div class="bar"><i id="prog"></i></div>
+
+<div class="ctl" id="fCh">
+  <span class="chip on" data-ch="0">全部</span>
+  <span class="chip" data-ch="1">第 1 章</span>
+  <span class="chip" data-ch="2">第 2 章 水</span>
+  <span class="chip" data-ch="3">第 3 章 气</span>
+  <span class="sep"></span>
+  <span class="chip" data-f="supp">只看〔补〕</span>
+  <span class="chip grn" data-f="wrong">错题本</span>
+</div>
+<div class="ctl" id="fMode">
+  <span class="chip on" data-m="card">卡片</span>
+  <span class="chip" data-m="type">默写</span>
+  <span class="chip" data-m="quiz">四选一</span>
+  <span class="chip" data-m="list">速查</span>
+  <span class="sep"></span>
+  <span class="chip" data-dir="zh">中 → 英</span>
+  <span class="chip" data-dir="en">英 → 中</span>
+  <span class="sep"></span>
+  <span class="chip" id="btnShuffle">洗牌</span>
+  <span class="chip" id="btnReset">清零</span>
+</div>
+
+<div id="stage">
+  <div class="qtag" id="qtag"></div>
+  <div id="front"></div>
+  <div id="sub"></div>
+  <div id="answer">
+    <div id="ansMain"></div>
+    <div id="ansNote"></div>
+  </div>
+
+  <div id="quiz"></div>
+  <div id="list"></div>
+
+  <div id="type">
+    <input id="tinput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="打出英文，回车提交">
+    <div id="fb"></div>
+  </div>
+
+  <div id="acts">
+    <button class="main" id="btnReveal">翻面 <span style="opacity:.7">␣</span></button>
+    <button class="no" id="btnNo" style="display:none">不会 1</button>
+    <button class="ok" id="btnOk" style="display:none">会了 2</button>
+  </div>
+
+  <div id="end">
+    <h2>这一轮走完了</h2>
+    <p id="endTxt"></p>
+    <div class="ctl" style="justify-content:center;margin-top:14px">
+      <span class="chip on" id="btnAgain">再来一轮</span>
+    </div>
+  </div>
+</div>
+
+<div id="hint">
+  <kbd>空格</kbd> 翻面 / 提交 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp; <kbd>←</kbd> 回上一条
+</div>
+
+<script>
+const TERMS = [{"zh":"环境监测","en":"Environmental Monitoring","note":"测定代表值，判断质量与趋势","ch":1,"supp":false},{"zh":"环境标准","en":"environmental standard","note":"环保工作要统一的技术规定","ch":1,"supp":true},{"zh":"环境质量标准","en":"environmental quality standard","note":"限制介质中有害物的允许含量","ch":1,"supp":true},{"zh":"污染物排放标准","en":"pollutant discharge standard","note":"管排放口浓度或总量","ch":1,"supp":true},{"zh":"环境方法标准","en":"environmental method standard","note":"管采样分析方法，保证可比","ch":1,"supp":true},{"zh":"环境标准物质标准","en":"environmental reference material standard","note":"管标准样品怎样制备定值","ch":1,"supp":true},{"zh":"环境基础标准","en":"environmental basic standard","note":"管术语、符号与指南","ch":1,"supp":true},{"zh":"环保仪器设备标准","en":"standard for environmental instruments and equipment","note":"管仪器设备技术性能","ch":1,"supp":true},{"zh":"优先污染物","en":"priority pollutant","note":"经筛选列入黑名单的污染物","ch":1,"supp":true},{"zh":"环境背景值","en":"Environment background value","note":"未受污染时的基线值","ch":1,"supp":false},{"zh":"地表水环境质量标准","en":"地表水环境质量标准（GB 3838—2002）","note":"五类水域，评价依据","ch":1,"supp":true},{"zh":"污水综合排放标准","en":"污水综合排放标准（GB 8978—1996）","note":"两类污染物、三级排放","ch":1,"supp":true},{"zh":"环境空气质量标准","en":"环境空气质量标准（GB 3095-2012）","note":"两级标准、两类地区","ch":1,"supp":true},{"zh":"国家标准","en":"national standard","note":"全国执行的最低要求","ch":1,"supp":true},{"zh":"地方标准","en":"local standard","note":"严于国标时执行它","ch":1,"supp":true},{"zh":"行业标准","en":"industry standard","note":"全行业统一执行","ch":1,"supp":true},{"zh":"监测断面","en":"Monitoring section","note":"河上横切一刀的那个面","ch":1,"supp":true},{"zh":"采样点","en":"sampling point","note":"断面上真正取水的位置","ch":1,"supp":false},{"zh":"瞬时水样","en":"Snap sample","note":"某一刻单瓶水，只代表那一刻","ch":1,"supp":false},{"zh":"混合水样","en":"Mixed sample","note":"同一点不同时刻水样合并","ch":1,"supp":false},{"zh":"综合水样","en":"Integrated sample","note":"不同点同时刻水样合并","ch":1,"supp":false},{"zh":"检出限","en":"detection limit","note":"能可靠检出的最低浓度","ch":1,"supp":true},{"zh":"准确度","en":"Good accuracy / High accuracy","note":"与真值差多少，看相对误差","ch":1,"supp":false},{"zh":"精密度","en":"Stable and high precision","note":"重复做几次散不散","ch":1,"supp":false},{"zh":"校准曲线","en":"calibration curve","note":"吸光度对浓度的那条直线","ch":1,"supp":true},{"zh":"空白试验","en":"Control test","note":"不加样品的一份，扣本底","ch":1,"supp":false},{"zh":"加标回收","en":"spike recovery","note":"加已知量测回来多少","ch":1,"supp":true},{"zh":"三致物质","en":"carcinogenic, teratogenic and mutagenic substances","note":"致癌、致畸、致突变","ch":1,"supp":true},{"zh":"水质监测","en":"Water Quality Monitoring","note":"测水体的质量与污染程度","ch":2,"supp":false},{"zh":"监测方案","en":"Water quality monitoring program","note":"定项目、断面、时间频率","ch":2,"supp":false},{"zh":"背景断面","en":"Background section","note":"几乎未受人类活动的河段","ch":2,"supp":false},{"zh":"对照断面","en":"Comparison section","note":"流入河段前的水质起点","ch":2,"supp":false},{"zh":"控制断面","en":"Control section","note":"排污口下游混匀处","ch":2,"supp":false},{"zh":"削减断面","en":"Cut-down section","note":"自净后浓度明显降低处","ch":2,"supp":false},{"zh":"垂直断面线","en":"Layout of vertical lines on a cross-section","note":"断面上按水深布垂线","ch":2,"supp":false},{"zh":"表层水","en":"Surface water","note":"水面下 0.3～0.5 m 处的水","ch":2,"supp":false},{"zh":"深层水","en":"Deep water","note":"用带重锤的采样器取","ch":2,"supp":false},{"zh":"采样器","en":"Sampler with weight","note":"沉到指定深度再开塞","ch":2,"supp":false},{"zh":"水样采集和保存","en":"Collection and preservation","note":"取样与存样两件事","ch":2,"supp":false},{"zh":"水样保存方法","en":"Preservation method","note":"冷藏、加抑制剂、调 pH","ch":2,"supp":false},{"zh":"冷藏或冷冻法","en":"Cooling treatment","note":"抑微生物、减慢反应","ch":2,"supp":false},{"zh":"化学试剂保存法","en":"Chemical inhibitor","note":"加抑制剂、氧化还原剂","ch":2,"supp":false},{"zh":"水样预处理","en":"Pretreatment of water","note":"消解、富集、分离的前处理","ch":2,"supp":false},{"zh":"消解","en":"Digestion","note":"破坏有机物，解放无机元素","ch":2,"supp":false},{"zh":"湿式消解法","en":"Wet digestion","note":"用酸消解，快而常用","ch":2,"supp":false},{"zh":"干式分解法","en":"dry decomposition","note":"干灰化，500～900 ℃ 烧","ch":2,"supp":false},{"zh":"富集","en":"Enrichment","note":"把少量物质浓缩到小体积","ch":2,"supp":true},{"zh":"分离","en":"Separation","note":"把待测组分别样析出","ch":2,"supp":true},{"zh":"溶剂萃取法","en":"Solvent extraction","note":"用有机溶剂把组分抽走","ch":2,"supp":false},{"zh":"固相萃取法","en":"Solid Phase Extraction, SPE","note":"固体萃取剂留住目标物","ch":2,"supp":false},{"zh":"离子交换法","en":"Ion exchange","note":"树脂按电荷换出离子","ch":2,"supp":false},{"zh":"共沉淀法","en":"Coprecipitation","note":"借沉淀带下痕量组分","ch":2,"supp":false},{"zh":"物理指标检验","en":"Physical parameter test","note":"水温色度浊度这些","ch":2,"supp":false},{"zh":"臭和味","en":"Odor and Taste","note":"感官指标，测臭阈值","ch":2,"supp":false},{"zh":"色度","en":"Chroma","note":"真色与表色，铂钴比色","ch":2,"supp":false},{"zh":"浊度","en":"Turbidity","note":"不溶物挡光的程度","ch":2,"supp":false},{"zh":"透明度","en":"Transparency","note":"水样的澄清程度","ch":2,"supp":false},{"zh":"固体物","en":"Solids","note":"可溶与不溶物的总称","ch":2,"supp":false},{"zh":"悬浮物","en":"（SS）","note":"滤后截留在滤器上的固体","ch":2,"supp":false},{"zh":"溶解固体物","en":"（DS）","note":"滤液蒸干后增加的重量","ch":2,"supp":false},{"zh":"矿化度","en":"Degree of mineralization","note":"水中总含盐量","ch":2,"supp":false},{"zh":"电导率","en":"Electrical conductivity","note":"溶解离子的多少","ch":2,"supp":false},{"zh":"氧化还原电位","en":"Redox potential","note":"正为氧化性，负为还原性","ch":2,"supp":false},{"zh":"溶解氧","en":"DO","note":"水里溶解的氧，现场测","ch":2,"supp":false},{"zh":"生化需氧量","en":"（BOD）","note":"微生物分解耗的氧","ch":2,"supp":false},{"zh":"化学需氧量","en":"Chemical oxygen demand (COD)","note":"化学氧化剂耗掉的氧","ch":2,"supp":false},{"zh":"高锰酸盐指数","en":"IMn","note":"高锰酸钾氧化的耗氧量","ch":2,"supp":false},{"zh":"总有机碳","en":"Total organic carbon, TOC","note":"烧出来的有机碳总量","ch":2,"supp":false},{"zh":"总需氧量","en":"Total oxygen demand, TOD","note":"全部可氧化物的需氧量","ch":2,"supp":false},{"zh":"干扰","en":"Interference","note":"别的组分让你读数偏高","ch":2,"supp":false},{"zh":"原子吸收光谱法","en":"Atomic absorption spectrum, AAS","note":"基态原子吸收特征谱线","ch":2,"supp":false},{"zh":"原子发射光谱法","en":"Atomic emission spectrum, AES","note":"受激原子放出特征光","ch":2,"supp":false},{"zh":"电感耦合等离子体","en":"Inductively coupled plasma","note":"ICP 的光源","ch":2,"supp":false},{"zh":"紫外可见吸收光谱法","en":"UV-vis","note":"分子吸收紫外可见光","ch":2,"supp":true},{"zh":"气相色谱法","en":"GC","note":"气体流动相带着样品走","ch":2,"supp":false},{"zh":"质谱法","en":"Mass spectrometry, MS","note":"按质荷比分离离子","ch":2,"supp":false},{"zh":"离子色谱法","en":"Ion chromatography, IC","note":"阴离子分析的主力","ch":2,"supp":false},{"zh":"空心阴极灯","en":"hollow cathode lamp","note":"AAS 的光源","ch":2,"supp":true},{"zh":"原子化器","en":"atomizer","note":"把样品变成基态原子","ch":2,"supp":true},{"zh":"基态原子","en":"ground state atoms","note":"能吸收共振线的那些原子","ch":2,"supp":false},{"zh":"共振线","en":"resonance line","note":"原子最常吸收的那条线","ch":2,"supp":true},{"zh":"标准加入法","en":"standard addition method","note":"基体复杂时用，样品里加标","ch":2,"supp":true},{"zh":"空气和废气监测","en":"Air and exhaust gas monitoring","note":"环境空气加烟囱废气","ch":3,"supp":false},{"zh":"空气污染","en":"Air pollution","note":"污染物进入大气造成危害","ch":3,"supp":false},{"zh":"一次污染物","en":"Primary pollutant","note":"直接排出来的那种","ch":3,"supp":false},{"zh":"二次污染物","en":"Secondary pollutant","note":"排出来以后变出来的","ch":3,"supp":false},{"zh":"降尘","en":"Dust fall","note":"粒径 >100\\,μm，易沉降","ch":3,"supp":false},{"zh":"总悬浮颗粒物","en":"Total suspended particulate matter（TSP）","note":"粒径 <100\\,μm 的全部","ch":3,"supp":false},{"zh":"可吸入颗粒物","en":"Inhalable particulate matter（PM10）","note":"粒径 <10\\,μm","ch":3,"supp":false},{"zh":"细颗粒物","en":"Fine particulate matter（PM2.5）","note":"粒径 <2.5\\,μm","ch":3,"supp":false},{"zh":"空气质量指数","en":"Air quality index, AQI","note":"无量纲，六项取最大","ch":3,"supp":false},{"zh":"布点","en":"Setting principle of monitoring section","note":"仪器放哪才代表全城","ch":3,"supp":true},{"zh":"功能区布点法","en":"Functional area setting method","note":"分区各设若干点","ch":3,"supp":false},{"zh":"网格布点法","en":"Grid setting method","note":"多源均匀分布时用","ch":3,"supp":false},{"zh":"同心圆布点法","en":"Concentric circle setting method","note":"大源集中时，绕圆布点","ch":3,"supp":false},{"zh":"扇形布点法","en":"Fan-shaped setting method","note":"孤立高架源、风向明确","ch":3,"supp":false},{"zh":"直接采样法","en":"Direct sampling method","note":"浓度高、方法灵敏时用","ch":3,"supp":false},{"zh":"富集采样法","en":"Enrichment sampling method","note":"浓度低时先把样抓住","ch":3,"supp":false},{"zh":"溶液吸收法","en":"Solution absorption method","note":"让气通过吸收液","ch":3,"supp":false},{"zh":"填充柱阻留法","en":"Column retention method","note":"吸附、分配、反应三种柱","ch":3,"supp":false},{"zh":"滤料阻留法","en":"Filter retention method","note":"颗粒物挡在滤料上","ch":3,"supp":false},{"zh":"低温冷凝法","en":"Low temperature condensation","note":"低沸点有机物冷凝下来","ch":3,"supp":false},{"zh":"静电沉降法","en":"Electrostatic sedimentation","note":"靠电场捕集颗粒物","ch":3,"supp":false},{"zh":"自然积集法","en":"Natural integration","note":"靠重力自然沉降","ch":3,"supp":false},{"zh":"采样效率","en":"Sampling efficiency","note":"采到的量占总量的百分数","ch":3,"supp":false},{"zh":"标准状态","en":"standard state","note":"273 K、101.325 kPa 的干气体","ch":3,"supp":false},{"zh":"参比状态","en":"reference state","note":"298.15 K，GB 3095 用它","ch":3,"supp":true},{"zh":"二氧化硫","en":"SO2","note":"溶液吸收或紫外荧光法测","ch":3,"supp":false},{"zh":"氮氧化物","en":"NOx","note":"分光或化学发光法测","ch":3,"supp":false},{"zh":"一氧化碳","en":"CO","note":"非色散红外吸收法","ch":3,"supp":false},{"zh":"臭氧","en":"O3","note":"与 NOx 并列的必测项","ch":3,"supp":false},{"zh":"光化学氧化剂","en":"Photochemical oxidant","note":"总氧化剂减去 0.269 倍 NOx","ch":3,"supp":false},{"zh":"硫酸盐化速率","en":"sulfation rate","note":"碱性表面吸收 SO2 的速率","ch":3,"supp":false},{"zh":"非甲烷总烃","en":"non-methyl hydrocarbons (NMHC)","note":"总烃扣掉甲烷","ch":3,"supp":false},{"zh":"挥发性有机物","en":"volatile organic compounds","note":"蒸气压大于 133.32 Pa","ch":3,"supp":false},{"zh":"切割器","en":"cutter","note":"只让小于某粒径的进来","ch":3,"supp":true},{"zh":"等速采样","en":"iso-kinetic sampling","note":"采样嘴流速等于烟气流速","ch":3,"supp":true},{"zh":"皮托管","en":"标准皮托管 / S型皮托管","note":"测全压静压，算流速","ch":3,"supp":true},{"zh":"动压","en":"dynamic pressure (Pv）","note":"单位体积气流的动能","ch":3,"supp":false},{"zh":"烟气含湿量","en":"Determination of moisture content","note":"重量、冷凝、干湿球三法","ch":3,"supp":false}];
+
+const LS = "hjjc.terms.v2";
+const store = JSON.parse(localStorage.getItem(LS) || '{"known":{},"wrong":{},"seen":{}}');
+const save = () => localStorage.setItem(LS, JSON.stringify(store));
+
+const hasEn = t => /[A-Za-z]/.test(t.en || "");
+const cjkCount = s => (s.match(/[\u4e00-\u9fff]/g) || []).length;
+const typeable = t => hasEn(t) && cjkCount(t.en) === 0 && t.en.length <= 45;
+const state = {ch:0, f:null, mode:"card", dir:"zh", queue:[], i:0, revealed:false, answered:false};
+
+/* ---------- 取题 ---------- */
+function pool(){
+  let p = TERMS.filter(t => !state.ch || t.ch === state.ch);
+  if (state.f === "supp") p = p.filter(t => t.supp);
+  if (state.f === "wrong") p = p.filter(t => store.wrong[t.zh]);
+  // 中→英 / 默写 需要真英文
+  if (state.mode === "type" || state.mode === "quiz") p = p.filter(typeable);
+  if (state.dir === "zh") p = p.filter(hasEn);
+  return p;
+}
+function shuffle(a){
+  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function build(shuffleIt){
+  let p = pool().slice();
+  if (shuffleIt !== false) shuffle(p);
+  // 不会的优先：错一次的排前面
+  if (state.f !== "wrong") p.sort((a, b) => (store.wrong[b.zh] ? 1 : 0) - (store.wrong[a.zh] ? 1 : 0));
+  state.queue = p; state.i = 0;
+  if (!p.length){ document.getElementById("stage").querySelectorAll("#answer,#acts,#quiz,#type,#front,#sub,#qtag").forEach(e => e.style.display = "none");
+    document.getElementById("end").style.display = "block";
+    document.getElementById("endTxt").textContent = "这个筛选下没有词条。换个筛选看看。";
+    document.getElementById("end").querySelector("#btnAgain").style.display = "none";
+    return;
+  }
+  render();
+}
+
+/* ---------- 渲染 ---------- */
+const $ = id => document.getElementById(id);
+function render(){
+  if (state.mode === "list"){ showList(); return; }
+  $("list").style.display = "none";
+  const t = state.queue[state.i];
+  const isEnd = !t;
+  $("end").style.display = isEnd ? "block" : "none";
+  ["qtag","front","sub","answer","acts"].forEach(k => $(k).style.display = isEnd ? "none" : "");
+  $("quiz").style.display = "none"; $("type").style.display = "none";
+  if (isEnd){
+    const n = state.queue.length;
+    $("endTxt").textContent = `走完 ${n} 条。错题本里现有 ${Object.keys(store.wrong).length} 条。`;
+    $("btnAgain").style.display = "";
+    updateStat();
+    return;
+  }
+  state.revealed = false; state.answered = false;
+  const askZh = (state.mode !== "card") || state.dir === "zh";
+  $("qtag").innerHTML = `<b>第 ${t.ch} 章</b> &nbsp;${t.supp ? '<span class="flag">补</span>' : ''} &nbsp;<span style="opacity:.6">${state.i + 1} / ${state.queue.length}</span>`;
+  $("front").className = askZh ? "" : "en";
+  $("front").textContent = askZh ? t.zh : t.en;
+  $("sub").textContent = state.mode === "card" ? (askZh ? "先在心里说出英文，再翻面" : "这是英文，想想它对应哪个中文术语") : "";
+  $("answer").className = ""; $("ansMain").className = askZh ? "" : "zh";
+  $("ansMain").textContent = askZh ? t.en : t.zh;
+  $("ansNote").textContent = t.note || "";
+  $("btnReveal").style.display = (state.mode === "quiz") ? "none" : ""; $("btnNo").style.display = "none"; $("btnOk").style.display = "none";
+  $("btnReveal").textContent = "翻面 ␣";
+
+  if (state.mode === "type") startType(t);
+  if (state.mode === "quiz") startQuiz(t);
+  updateStat();
+}
+
+/* ---------- 速查表 ---------- */
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function showList(){
+  $("end").style.display = "none";
+  ["qtag","front","sub","answer","acts","quiz","type"].forEach(k => $(k).style.display = "none");
+  const el = $("list"); el.style.display = "block";
+  const rows = state.queue.map(t =>
+    `<div class="row"><div class="rz">${t.supp ? '<span class="flag">补</span>' : ''}${esc(t.zh)}</div>` +
+    `<div class="re">${esc(t.en)}</div>` +
+    (t.note ? `<div class="rn">${esc(t.note)}</div>` : "") + `</div>`).join("");
+  el.innerHTML = `<div class="lh">共 ${state.queue.length} 条（按当前筛选；直接背，不用点）</div>` + rows;
+  updateStat();
+}
+
+function updateStat(){
+  const known = Object.keys(store.known).length;
+  const wrong = Object.keys(store.wrong).length;
+  $("stat").textContent = `掌握 ${known}/${TERMS.length} · 错 ${wrong}`;
+  $("prog").style.width = (known / TERMS.length * 100) + "%";
+}
+
+/* ---------- 卡片 ---------- */
+function reveal(){
+  state.revealed = true;
+  $("answer").className = "show";
+  $("btnReveal").style.display = "none";
+  $("btnNo").style.display = ""; $("btnOk").style.display = "";
+}
+function grade(ok){
+  const t = state.queue[state.i];
+  if (!t) return;
+  if (ok){
+    store.known[t.zh] = 1;
+    if (store.wrong[t.zh]) delete store.wrong[t.zh];
+  } else {
+    delete store.known[t.zh];
+    store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1;
+  }
+  save(); next();
+}
+function next(){
+  state.i++;
+  if (state.i >= state.queue.length){ render(); return; }
+  render();
+}
+function prev(){ if (state.i > 0){ state.i--; render(); } }
+
+/* ---------- 默写 ---------- */
+function startType(t){
+  state.answered = false;
+  $("type").style.display = "block";
+  $("answer").className = "";
+  $("btnReveal").style.display = ""; $("btnReveal").textContent = "看答案 ␣";
+  const inp = $("tinput"); inp.value = ""; $("fb").textContent = ""; $("fb").className = "";
+  setTimeout(() => inp.focus(), 30);
+}
+const norm = s => s.toLowerCase().replace(/[\s\-—–_.,;:()（）\[\]〔〕'’"“”]/g, "").replace(/μ/g, "u");
+function submitType(){
+  const t = state.queue[state.i];
+  if (!t) return;
+  const inp = $("tinput");
+  if (state.answered){ next(); return; }
+  const v = inp.value.trim();
+  if (!v){ return; }
+  const good = norm(v) === norm(t.en);
+  const close = !good && (norm(t.en).includes(norm(v)) && norm(v).length >= norm(t.en).length * .8);
+  $("fb").className = good ? "good" : "bad";
+  $("fb").textContent = good ? "对。" : (close ? "接近了，差一点。" : "不对。");
+  $("ansMain").textContent = t.en; $("ansNote").textContent = t.note || "";
+  $("answer").className = "show";
+  state.answered = true;
+  if (good){ store.known[t.zh] = 1; delete store.wrong[t.zh]; }
+  else { delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; }
+  save(); updateStat();
+  $("btnReveal").style.display = "none"; $("btnNo").style.display = "none"; $("btnOk").style.display = "";
+  $("btnOk").textContent = "下一条 ␣";
+}
+
+/* ---------- 四选一 ---------- */
+function startQuiz(t){
+  state.answered = false;
+  const box = $("quiz"); box.style.display = "flex"; box.innerHTML = "";
+  const others = shuffle(TERMS.filter(x => x.zh !== t.zh && typeable(x) && x.en !== t.en)).slice(0, 3).map(x => x.en);
+  const opts = shuffle([t.en, ...others]);
+  opts.forEach(o => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.textContent = o;
+    b.onclick = () => {
+      if (state.answered) return;
+      state.answered = true;
+      const good = o === t.en;
+      [...box.children].forEach(c => {
+        if (c.textContent === t.en) c.classList.add("right");
+        else if (c === b) c.classList.add("wrong");
+      });
+      if (good){ store.known[t.zh] = 1; delete store.wrong[t.zh]; }
+      else { delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; }
+      save(); updateStat();
+      $("ansNote").textContent = t.note || "";
+      $("btnOk").style.display = ""; $("btnOk").textContent = "下一条 ␣";
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- 事件 ---------- */
+$("btnReveal").onclick = () => {
+  if (state.mode === "type"){ // 看答案 = 直接判不会
+    const t = state.queue[state.i]; if (!t) return;
+    $("ansMain").textContent = t.en; $("ansNote").textContent = t.note || "";
+    $("answer").className = "show"; state.answered = true;
+    delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; save(); updateStat();
+    $("btnReveal").style.display = "none"; $("btnOk").style.display = ""; $("btnOk").textContent = "下一条 ␣";
+    return;
+  }
+  reveal();
+};
+$("btnNo").onclick = () => grade(false);
+$("btnOk").onclick = () => {
+  if (state.mode === "type"){ next(); return; }
+  if (state.mode === "quiz"){ next(); return; }
+  grade(true);
+};
+
+document.addEventListener("keydown", e => {
+  const typing = document.activeElement && document.activeElement.id === "tinput";
+  if (typing){
+    if (e.key === "Enter"){ e.preventDefault(); submitType(); }
+    return;
+  }
+  if (e.key === " " || e.key === "Enter"){
+    e.preventDefault();
+    if (state.mode === "card"){ state.revealed ? next() : reveal(); }
+    else if (state.mode === "type"){ state.answered ? next() : submitType(); }
+    else { if (state.answered) next(); }
+    return;
+  }
+  if (e.key === "1"){ e.preventDefault(); if (state.mode === "card" && state.revealed) grade(false); }
+  if (e.key === "2"){ e.preventDefault(); if (state.mode === "card" && state.revealed) grade(true); }
+  if (e.key === "ArrowLeft"){ e.preventDefault(); prev(); }
+});
+
+document.querySelectorAll("#fCh .chip").forEach(c => c.onclick = () => {
+  document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
+  c.classList.add("on");
+  if (c.dataset.ch !== undefined){ state.ch = +c.dataset.ch; state.f = null; }
+  else { state.f = c.dataset.f; }
+  build();
+});
+document.querySelectorAll("#fMode .chip[data-m]").forEach(c => c.onclick = () => {
+  document.querySelectorAll("#fMode .chip[data-m]").forEach(x => x.classList.remove("on"));
+  c.classList.add("on"); state.mode = c.dataset.m; build(false);
+});
+document.querySelectorAll("#fMode .chip[data-dir]").forEach(c => c.onclick = () => {
+  document.querySelectorAll("#fMode .chip[data-dir]").forEach(x => x.classList.remove("on"));
+  c.classList.add("on"); state.dir = c.dataset.dir; build();
+});
+$("btnShuffle").onclick = () => build();
+$("btnReset").onclick = () => {
+  if (!confirm("清空掌握记录和错题本？")) return;
+  store.known = {}; store.wrong = {}; save(); build();
+};
+$("btnAgain").onclick = () => { $("btnAgain").style.display = ""; build(); };
+
+document.querySelectorAll("#fMode .chip[data-dir]")[0].classList.add("on");
+build();
+</script>
+</body>
+</html>
