@@ -73,6 +73,11 @@ kbd{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:#fff;bo
 .szh{font-size:30px;font-weight:700;letter-spacing:.01em;margin:26px 0 6px;line-height:1.3}
 .szh.small{font-size:22px}
 .sen{font-size:20px;color:var(--acc);font-weight:600;margin-top:10px;line-height:1.35}
+.szh.lat{font-size:27px;letter-spacing:0;line-height:1.25}
+.szh.lat.long{font-size:21px}
+.sen.zh{color:var(--ink);font-size:22px;font-weight:700}
+.stag .dirbtn{border:1px solid var(--line);border-radius:4px;padding:0 6px;cursor:pointer;user-select:none}
+.stag .dirbtn:active{background:var(--sand)}
 .snt{font-size:13px;color:var(--gry);margin-top:8px;line-height:1.6}
 .sgap{flex:1}
 .sbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
@@ -221,14 +226,15 @@ const dk = (ts) => { const d = new Date(ts == null ? Date.now() : ts);
 const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / DAY);
 
 function defState(){
-  return {v:2, cfg:{daily:30, newPerDay:15}, card:{}, key:{}, log:{}, streak:0, best:0, lastDay:''};
+  return {v:2, cfg:{daily:30, newPerDay:15, dir:'mix'}, card:{}, key:{}, log:{}, streak:0, best:0, lastDay:''};
 }
 let S = defState();
 try {
   const raw = localStorage.getItem(LSKEY);
   if (raw){ const o = JSON.parse(raw); if (o && o.v === 2) S = o; }
 } catch (e) {}
-if (!S.cfg) S.cfg = {daily:30, newPerDay:15};
+if (!S.cfg) S.cfg = {daily:30, newPerDay:15, dir:'zh'};
+if (!S.cfg.dir) S.cfg.dir = 'mix';
 save();
 function save(){ try { localStorage.setItem(LSKEY, JSON.stringify(S)); } catch (e) {} }
 
@@ -271,6 +277,17 @@ function buildQueue(){
   Q = rev.map(t => ({t, kind:'复习'})).concat(news.map(t => ({t, kind:'新词'})));
   Qpos = 0; cur = null; revealed = false;
   sess = {n:0, good:0, hard:0, bad:0, total:Q.length};
+}
+
+const DIRNAME = {zh:'中→英', en:'英→中', mix:'交替'};
+function dirOf(t){
+  const d = S.cfg.dir || 'zh';
+  if (d !== 'mix') return d;
+  return (TERMS.indexOf(t) % 2) ? 'en' : 'zh';
+}
+function cycleDir(){
+  S.cfg.dir = S.cfg.dir === 'zh' ? 'en' : (S.cfg.dir === 'en' ? 'mix' : 'zh');
+  save(); renderStudy();
 }
 
 function nextCard(){
@@ -400,6 +417,13 @@ function renderStudy(){
   const t = cur.t;
   const c = cardOf(t);
   const idx = (Qpos) + ' / ' + Q.length;
+  const d = dirOf(t);
+  const front = d === 'en' ? t.en : t.zh;
+  const back  = d === 'en' ? t.zh : t.en;
+  const fcls = d === 'en'
+    ? ' lat' + (front.length > 24 ? ' long' : '')
+    : (front.length > 9 ? ' small' : '');
+  const hint = d === 'en' ? '先在心里说出中文，再显示答案' : '先在心里说出英文，再显示答案';
   box.innerHTML = `
   <div class="card scard">
     <div class="stag">
@@ -407,9 +431,10 @@ function renderStudy(){
       <span>第 ${t.ch} 章</span>
       <span class="k ${cur.kind === '新词' ? '' : 'rev'}">${cur.kind}</span>
       ${c && c.i ? `<span>上次间隔 ${c.i} 天</span>` : ''}
+      <span class="dirbtn" id="sDir">${DIRNAME[S.cfg.dir || 'mix']}</span>
     </div>
-    <div class="szh${t.zh.length > 9 ? ' small' : ''}">${esc(t.zh)}</div>
-    <div class="sen" id="sen" style="display:${revealed ? 'block' : 'none'}">${esc(t.en)}</div>
+    <div class="szh${fcls}">${esc(front)}</div>
+    <div class="sen${d === 'en' ? ' zh' : ''}" id="sen" style="display:${revealed ? 'block' : 'none'}">${esc(back)}</div>
     <div class="snt" id="snt" style="display:${revealed ? 'block' : 'none'}">${esc(t.note || '')}</div>
     <div class="sgap"></div>
     ${revealed
@@ -421,8 +446,9 @@ function renderStudy(){
       : `<button class="btn main wide" id="sReveal">显示答案<kbd>空格</kbd></button>`}
   </div>
   <div class="muted" style="text-align:center;margin-top:10px">
-    ${revealed ? '认识 → 下次隔很久｜模糊 → 过几天再来｜不认识 → 这一轮里还会出现' : '先在心里说出英文，再显示答案'}
+    ${revealed ? '认识 → 下次隔很久｜模糊 → 过几天再来｜不认识 → 这一轮里还会出现' : hint}
   </div>`;
+  $('sDir').onclick = cycleDir;
   if (!revealed) $('sReveal').onclick = () => { revealed = true; renderStudy(); };
   else box.querySelectorAll('.sbtns button').forEach(b => b.onclick = () => gradeCur(b.dataset.k));
 }
@@ -502,6 +528,10 @@ function renderMe(){
     <div class="chips" id="cnew">
       ${[8,15,25,89].map(n => `<span class="chip${S.cfg.newPerDay === n ? ' on' : ''}" data-n="${n}">${n === 89 ? '全部' : n}</span>`).join('')}
     </div>
+    <div class="row" style="margin-top:8px"><div class="rt">背词方向<div class="rs">卡片正面给什么</div></div></div>
+    <div class="chips" id="cdir">
+      ${[['zh','中→英'],['en','英→中'],['mix','交替']].map(([k, v]) => `<span class="chip${(S.cfg.dir || 'mix') === k ? ' on' : ''}" data-d="${k}">${v}</span>`).join('')}
+    </div>
     <div class="row" style="margin-top:8px"><div class="rt">每天总目标<div class="rs">进度环按这个算</div></div></div>
     <div class="chips" id="cdaily">
       ${[20,30,50,89].map(n => `<span class="chip${S.cfg.daily === n ? ' on' : ''}" data-n="${n}">${n === 89 ? '不限' : n}</span>`).join('')}
@@ -522,6 +552,7 @@ function renderMe(){
   <div class="muted" style="margin-top:10px">考试 2026-11-17（周二）。这里只收课件上真写出来的条目，英文照老师原文，没有一处是自己翻的。</div>`;
 
   $('v-me').querySelectorAll('#cnew .chip').forEach(c => c.onclick = () => { S.cfg.newPerDay = +c.dataset.n; save(); renderMe(); });
+  $('v-me').querySelectorAll('#cdir .chip').forEach(c => c.onclick = () => { S.cfg.dir = c.dataset.d; save(); renderMe(); });
   $('v-me').querySelectorAll('#cdaily .chip').forEach(c => c.onclick = () => { S.cfg.daily = +c.dataset.n; save(); renderMe(); });
   $('dType').onclick = () => startDrill();
   $('reset').onclick = () => {
