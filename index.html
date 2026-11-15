@@ -1,264 +1,175 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fbf8f3">
 <title>环境监测 · 背术语</title>
-<meta name="theme-color" content="#961e2d">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="背术语">
-<meta name="mobile-web-app-capable" content="yes">
 <style>
-:root{
-  --paper:#faf7f2; --ink:#1c1c1e; --gry:#6b6b70; --line:#ddd6cb;
-  --acc:#961e2d; --acc-l:#f3e3e4; --grn:#1f6b45; --grn-l:#e4efe7;
-  --blu:#22507a; --blu-l:#e3ecf4; --sand:#f2ece1;
-  --tabH:56px;
-}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;padding:0}
+:root{
+  --paper:#fbf8f3;--card:#fff;--ink:#22201d;--gry:#8a8378;--line:#e7e1d7;
+  --acc:#961e2d;--acc-l:#f8ecec;--grn:#2f7d4f;--grn-l:#eaf3ed;
+  --blu:#1d4f7c;--blu-l:#eaf0f6;--sand:#efe7d8;--tabH:56px;
+}
+html,body{margin:0}
 body{
-  background:var(--paper); color:var(--ink);
-  font-family:"PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
-  font-size:16px; line-height:1.65;
-  padding:14px 14px calc(var(--tabH) + 26px + env(safe-area-inset-bottom));
-  max-width:760px; margin:0 auto;
+  background:var(--paper);color:var(--ink);
+  font:15px/1.65 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  padding-bottom:calc(var(--tabH) + 20px + env(safe-area-inset-bottom));
+  -webkit-text-size-adjust:100%;
 }
-header{display:flex;align-items:baseline;gap:8px;border-bottom:1.5px solid var(--acc);padding-bottom:7px}
-h1{font-size:19px;margin:0;letter-spacing:.4px}
-h1 small{font-size:11.5px;color:var(--gry);font-weight:400;margin-left:5px;letter-spacing:0}
-#stat{margin-left:auto;font-size:12px;color:var(--gry);font-variant-numeric:tabular-nums}
-.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:9px 0 11px}
-.bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .25s}
-
-.ctl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}
-#fCh{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-#fCh::-webkit-scrollbar{display:none}
-.chip{
-  font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);
-  background:#fff;color:var(--gry);cursor:pointer;user-select:none;transition:.15s;
-  white-space:nowrap;flex:0 0 auto;
-}
-.chip:hover{border-color:var(--acc);color:var(--acc)}
-.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
-.chip.on.grn{background:var(--grn);border-color:var(--grn)}
-.sep{width:1px;background:var(--line);margin:2px 3px;flex:0 0 auto}
-
-#stage{
-  background:#fff;border:1px solid var(--line);border-radius:10px;
-  padding:20px 18px;min-height:236px;display:flex;flex-direction:column;
-  box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -18px rgba(0,0,0,.35);
-}
-.qtag{font-size:11.5px;color:var(--gry);letter-spacing:.08em;margin-bottom:9px}
-.qtag b{color:var(--acc);font-weight:600}
-#front{font-size:28px;font-weight:650;line-height:1.35;letter-spacing:.4px;word-break:break-word}
-#front.en{font-size:25px;font-weight:600;font-family:Georgia,"Times New Roman",serif;letter-spacing:.2px}
-#sub{color:var(--gry);font-size:13px;margin-top:7px}
-#answer{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:none}
-#answer.show{display:block}
-#ansMain{font-size:24px;font-weight:600;font-family:Georgia,"Times New Roman",serif;color:var(--blu);word-break:break-word}
-#ansMain.zh{font-family:inherit;font-size:21px;color:var(--ink)}
-#ansNote{font-size:13px;color:var(--gry);margin-top:7px}
-.flag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--sand);color:#8a6a2f;margin-left:6px;vertical-align:2px;font-family:inherit;font-weight:400}
-
-#acts{display:flex;gap:9px;margin-top:18px}
-button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:#fff;padding:12px 8px;flex:1;transition:.15s}
-button:active{transform:scale(.985)}
-button.main{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
-button.ok{background:var(--grn);border-color:var(--grn);color:#fff;font-weight:600}
-button.no{background:#fff;border-color:#c9b7b9;color:var(--acc);font-weight:600}
-
-#quiz{display:none;flex-direction:column;gap:8px;margin-top:14px}
-.opt{
-  text-align:left;padding:13px 13px;border:1px solid var(--line);border-radius:8px;background:#fff;
-  font-size:16px;font-family:Georgia,"Times New Roman",serif;line-height:1.4;flex:none;
-}
-.opt.right{background:var(--grn-l);border-color:var(--grn);font-weight:600}
-.opt.wrong{background:var(--acc-l);border-color:var(--acc);text-decoration:line-through;opacity:.75}
-
-#list{display:none;margin-top:2px;max-height:66vh;overflow:auto;-webkit-overflow-scrolling:touch}
-#list .row,#home .row{display:grid;grid-template-columns:1fr;gap:1px;padding:7px 0;border-bottom:1px solid var(--line)}
-#list .rz,#home .rz{font-size:13.5px;color:var(--ink)}
-#list .re,#home .re{font-size:13px;color:var(--acc);word-break:break-word}
-#list .rn,#home .rn{font-size:11.5px;color:var(--gry);line-height:1.5}
-#list .flag,#home .flag{margin-left:0;margin-right:4px}
-#list .lh{font-size:12px;color:var(--gry);padding:2px 0 5px}
-
-#type{display:none;margin-top:14px}
-#type input{
-  width:100%;font:inherit;font-size:18px;padding:11px 12px;border:1px solid var(--line);
-  border-radius:8px;background:#fff;font-family:Georgia,"Times New Roman",serif;
-}
-#type input:focus{outline:none;border-color:var(--blu);box-shadow:0 0 0 3px var(--blu-l)}
-#fb{margin-top:9px;font-size:14px;min-height:21px}
-#fb.good{color:var(--grn);font-weight:600}
-#fb.bad{color:var(--acc);font-weight:600}
-#end{display:none;text-align:center;padding:26px 8px}
-#end h2{font-size:18px;margin:0 0 5px}
-#end p{color:var(--gry);font-size:13.5px}
-
-#hint{font-size:11.5px;color:var(--gry);margin-top:10px;text-align:center}
-#hint kbd{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#444}
-#hint .kb{display:none}
-@media (hover:hover){ #hint .kb{display:inline} }
-
-/* ---------- 总览 ---------- */
-#home{display:none}
-#home .hcards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
-#home .hc{border:1px solid var(--line);border-radius:9px;padding:10px 8px;text-align:center;background:var(--paper)}
-#home .hc b{display:block;font-size:23px;line-height:1.2;font-variant-numeric:tabular-nums;color:var(--ink)}
-#home .hc span{font-size:11.5px;color:var(--gry)}
-#home .hc.acc{border-color:#e0c3c6;background:var(--acc-l)}
-#home .hc.acc b{color:var(--acc)}
-#home .hsec{font-size:12px;color:var(--acc);font-weight:700;letter-spacing:.06em;margin:16px 0 6px;
+header{display:flex;align-items:baseline;gap:8px;padding:14px 16px 6px}
+h1{font-size:17px;margin:0;letter-spacing:.01em}
+h1 small{font-size:11.5px;color:var(--gry);font-weight:400;margin-left:5px}
+#hstat{margin-left:auto;font-size:11.5px;color:var(--gry);font-variant-numeric:tabular-nums}
+main{padding:0 14px}
+.view{display:none}
+.view.on{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.hsec{font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.06em;margin:18px 0 8px;
   padding-left:7px;border-left:3px solid var(--acc);line-height:1.2}
-#home .chrow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
-#home .chrow:last-child{border-bottom:none}
-#home .chrow .nm{font-size:13.5px;flex:1}
-#home .chrow .n{font-size:12px;color:var(--gry);font-variant-numeric:tabular-nums}
-#home .minibar{width:56px;height:5px;border-radius:3px;background:var(--line);overflow:hidden;flex:0 0 auto}
-#home .minibar i{display:block;height:100%;background:var(--grn)}
-#home .qbtn{display:flex;gap:8px;flex-wrap:wrap}
-#home .qbtn button{flex:1 1 30%;font-size:13.5px;padding:11px 6px;border-radius:9px}
-#home details{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:var(--paper);overflow:hidden}
-#home summary{padding:10px 12px;font-size:13.5px;cursor:pointer;list-style:none}
-#home summary::-webkit-details-marker{display:none}
-#home summary::before{content:"▸ ";color:var(--acc)}
-#home details[open] summary::before{content:"▾ "}
-#home details[open] summary{border-bottom:1px solid var(--line);background:#fff}
-#home .dbody{padding:0 12px 8px;background:#fff}
-#home .note{font-size:11.5px;color:var(--gry);line-height:1.6;margin-top:10px}
+.muted{color:var(--gry);font-size:12.5px;line-height:1.6}
+button{font:inherit;cursor:pointer}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;
+  padding:10px 12px;font-size:14px}
+.btn.main{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
+.btn.wide{display:block;width:100%;text-align:center;padding:13px;font-size:15px}
+kbd{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:#fff;border:1px solid var(--line);
+  border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#555;margin-left:4px}
+
+/* ---------- 今日 ---------- */
+.hero{display:flex;align-items:center;gap:16px;margin-top:6px}
+.ring{width:108px;height:108px;border-radius:50%;flex:0 0 auto;position:relative;
+  background:conic-gradient(var(--acc) calc(var(--p,0) * 1%), var(--line) 0);
+  display:flex;align-items:baseline;justify-content:center;padding-top:38px}
+.ring::before{content:"";position:absolute;inset:9px;background:var(--card);border-radius:50%}
+.ring b{position:relative;font-size:27px;line-height:1;font-variant-numeric:tabular-nums}
+.ring u{position:relative;font-size:12px;color:var(--gry);text-decoration:none;margin-left:2px}
+.hmeta{flex:1}
+.hmeta .l1{font-size:15px;font-weight:600;line-height:1.35}
+.hmeta .l2{font-size:12.5px;color:var(--gry);margin-top:3px;line-height:1.6}
+.hpills{display:flex;gap:8px;margin-top:12px}
+.hpill{flex:1;text-align:center;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:8px 4px}
+.hpill b{display:block;font-size:19px;line-height:1.25;font-variant-numeric:tabular-nums}
+.hpill span{font-size:11px;color:var(--gry)}
+.hpill.acc b{color:var(--acc)}
+.hpill.grn b{color:var(--grn)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:4px}
+.cal i{height:26px;border-radius:5px;background:#f0ebe2;font-style:normal;font-size:9px;color:#b6ada0;
+  display:flex;align-items:center;justify-content:center}
+.cal i.d1{background:#e8c9cc;color:#7b1a25}
+.cal i.d2{background:#cf9ba1;color:#fff}
+.cal i.d3{background:var(--acc);color:#fff}
+.cal i.today{outline:2px solid var(--acc);outline-offset:1px}
+.calx{display:flex;justify-content:space-between;font-size:10.5px;color:var(--gry);margin-top:6px}
+
+/* ---------- 背词 ---------- */
+.scard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px;
+  min-height:270px;display:flex;flex-direction:column}
+.stag{display:flex;gap:8px;font-size:11px;color:var(--gry);font-variant-numeric:tabular-nums}
+.stag .k{background:var(--sand);color:#7a6335;border-radius:4px;padding:0 6px}
+.stag .k.rev{background:var(--blu-l);color:var(--blu)}
+.szh{font-size:30px;font-weight:700;letter-spacing:.01em;margin:26px 0 6px;line-height:1.3}
+.szh.small{font-size:22px}
+.sen{font-size:20px;color:var(--acc);font-weight:600;margin-top:10px;line-height:1.35}
+.snt{font-size:13px;color:var(--gry);margin-top:8px;line-height:1.6}
+.sgap{flex:1}
+.sbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.sbtns button{border-radius:10px;padding:13px 4px;font-size:14px;border:1px solid var(--line);background:var(--paper)}
+.sbtns .b1{color:var(--acc);border-color:#e8c9cc;background:var(--acc-l)}
+.sbtns .b2{color:var(--blu);border-color:#cfdeea;background:var(--blu-l)}
+.sbtns .b3{color:var(--grn);border-color:#cfe3d6;background:var(--grn-l)}
+.sdone{text-align:center;padding:34px 10px}
+.sdone .big{font-size:44px;line-height:1.2}
+.sdone h2{font-size:19px;margin:10px 0 6px}
 
 /* ---------- 重点栏 ---------- */
-#key{display:none;margin-top:2px;max-height:66vh;overflow:auto;-webkit-overflow-scrolling:touch}
-#key .kg{font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.06em;margin:14px 0 4px;
+.kh{font-size:12px;color:var(--gry);padding:2px 0 6px}
+.kg{font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.06em;margin:14px 0 4px;
   padding-left:7px;border-left:3px solid var(--acc);line-height:1.2}
-#key .kg:first-child{margin-top:2px}
-#key .ki{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer;align-items:flex-start}
-#key .ki .ck{flex:0 0 auto;width:17px;height:17px;margin-top:3px;border:1.5px solid var(--line);border-radius:50%;
-  font-size:11px;line-height:15px;text-align:center;color:transparent}
-#key .ki.done .ck{background:var(--grn);border-color:var(--grn);color:#fff}
-#key .ki.done .tx{color:var(--gry);text-decoration:line-through;text-decoration-thickness:1px}
-#key .ki .tx{font-size:13.5px;line-height:1.55}
-#key .ki .tx em{font-style:normal;color:var(--acc);font-weight:600}
-#key .ki .src{float:right;margin-left:10px;font-size:10.5px;color:#b6ada0;letter-spacing:.02em;line-height:1.55}
-#key .kh{font-size:12px;color:var(--gry);padding:2px 0 4px}
-#key .f{font-family:Georgia,"Times New Roman",serif;color:var(--blu);font-size:14px;word-break:break-word}
+.kg:first-child{margin-top:2px}
+.ki{display:flex;gap:9px;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer;align-items:flex-start}
+.ki:last-child{border-bottom:none}
+.ki .ck{flex:0 0 auto;width:17px;height:17px;margin-top:3px;border:1.5px solid var(--line);border-radius:50%;
+  font-size:11px;line-height:14px;text-align:center;color:transparent}
+.ki.done .ck{background:var(--grn);border-color:var(--grn);color:#fff}
+.ki .tx{flex:1;font-size:13.5px;line-height:1.55}
+.ki .tx em{font-style:normal;color:var(--acc);font-weight:600}
+.ki .tx .f{color:var(--blu);font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+.ki.done .tx{color:var(--gry);text-decoration:line-through;text-decoration-thickness:1px}
+.ki .src{float:right;margin-left:10px;font-size:10.5px;color:#b6ada0;letter-spacing:.02em;line-height:1.55}
 
-/* ---------- 底部标签栏 ---------- */
-.tabbar{
-  position:fixed;left:0;right:0;bottom:0;height:calc(var(--tabH) + env(safe-area-inset-bottom));
-  padding-bottom:env(safe-area-inset-bottom);
-  background:rgba(250,247,242,.97);border-top:1px solid var(--line);
-  display:flex;align-items:stretch;backdrop-filter:blur(8px);z-index:20;
-}
-.tabbar .tab{
-  flex:1;border:none;background:none;border-radius:0;padding:6px 0 4px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-  font-size:10.5px;color:var(--gry);letter-spacing:.02em;
-}
-.tabbar .tab i{font-style:normal;font-size:15px;line-height:1;opacity:.75}
-.tabbar .tab.on{color:var(--acc);font-weight:700}
-.tabbar .tab.on i{opacity:1}
+/* ---------- 词库 ---------- */
+.chips{display:flex;gap:7px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:999px;padding:5px 12px;font-size:12.5px}
+.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.lrow{display:flex;align-items:baseline;gap:8px;padding:10px 0;border-bottom:1px solid var(--line)}
+.lrow:last-child{border-bottom:none}
+.lrow .z{font-size:14.5px;flex:0 0 auto;max-width:44%}
+.lrow .e{font-size:13px;color:var(--acc);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lrow .st{font-size:10px;color:var(--gry);flex:0 0 auto;border:1px solid var(--line);border-radius:4px;padding:0 5px}
+.lrow .st.m{color:var(--grn);border-color:#cfe3d6;background:var(--grn-l)}
+.lrow .st.n{color:var(--blu);border-color:#cfdeea;background:var(--blu-l)}
 
-@media (max-width:400px){
-  body{padding-left:11px;padding-right:11px}
-  #front{font-size:25px} #ansMain{font-size:21px}
-  #stage{padding:18px 14px;min-height:210px}
-  #home .hc b{font-size:20px}
-}
+/* ---------- 我的 ---------- */
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.mbox{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.mbox b{display:block;font-size:21px;line-height:1.25;font-variant-numeric:tabular-nums}
+.mbox span{font-size:11.5px;color:var(--gry)}
+.row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.row:last-child{border-bottom:none}
+.row .rt{flex:1}
+.row .rs{font-size:11.5px;color:var(--gry)}
+
+/* ---------- 拼写 ---------- */
+.dinput{width:100%;font:inherit;font-size:17px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.dinput:focus{outline:2px solid var(--acc);outline-offset:-1px}
+.dres{font-size:13px;margin-top:10px;line-height:1.6}
+.dres.ok{color:var(--grn)}
+.dres.no{color:var(--acc)}
+
+/* ---------- tabbar ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;
+  height:calc(var(--tabH) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(251,248,243,.95);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.tab{flex:1;border:0;background:none;font:inherit;font-size:10.5px;color:var(--gry);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.tab i{font-style:normal;font-size:16px;line-height:1;opacity:.7}
+.tab.on{color:var(--acc);font-weight:700}
+.tab.on i{opacity:1}
+@media (min-width:560px){body{max-width:560px;margin:0 auto}main{padding:0 16px}}
 </style>
 </head>
 <body>
 
 <header>
   <h1>环境监测 · 背术语<small>双语 <span id="nTot"></span> 条</small></h1>
-  <div id="stat"></div>
+  <div id="hstat"></div>
 </header>
-<div class="bar"><i id="prog"></i></div>
 
-<div id="toolbar">
-  <div class="ctl" id="fCh">
-    <span class="chip on" data-ch="0">全部</span>
-    <span class="chip" data-ch="1">第 1 章</span>
-    <span class="chip" data-ch="2">第 2 章 水</span>
-    <span class="chip" data-ch="3">第 3 章 气</span>
-    <span class="sep"></span>
-      <span class="chip grn" data-f="wrong">错题本</span>
-  </div>
-  <div class="ctl" id="fMode">
-    <span class="chip on" data-dir="zh">中 → 英</span>
-    <span class="chip" data-dir="en">英 → 中</span>
-    <span class="sep"></span>
-    <span class="chip" id="btnShuffle">洗牌</span>
-    <span class="chip" id="btnReset">清零</span>
-  </div>
-</div>
-
-<div id="stage">
-  <div id="home"></div>
-  <div class="qtag" id="qtag"></div>
-  <div id="front"></div>
-  <div id="sub"></div>
-  <div id="answer">
-    <div id="ansMain"></div>
-    <div id="ansNote"></div>
-  </div>
-
-  <div id="quiz"></div>
-  <div id="list"></div>
-  <div id="key"></div>
-
-  <div id="type">
-    <input id="tinput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="打出英文，回车提交">
-    <div id="fb"></div>
-  </div>
-
-  <div id="acts">
-    <button class="main" id="btnReveal">翻面 <span style="opacity:.7">␣</span></button>
-    <button class="no" id="btnNo" style="display:none">不会 1</button>
-    <button class="ok" id="btnOk" style="display:none">会了 2</button>
-  </div>
-
-  <div id="end">
-    <h2>这一轮走完了</h2>
-    <p id="endTxt"></p>
-    <div class="ctl" style="justify-content:center;margin-top:12px">
-      <span class="chip on" id="btnAgain">再来一轮</span>
-    </div>
-  </div>
-</div>
-
-<div id="hint">
-  <span class="kb"><kbd>空格</kbd> 翻面 / 提交 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp;</span>
-  点上方标签切换模式
-</div>
+<main>
+  <section id="v-home" class="view on"></section>
+  <section id="v-study" class="view"></section>
+  <section id="v-key" class="view"></section>
+  <section id="v-list" class="view"></section>
+  <section id="v-me" class="view"></section>
+  <section id="v-drill" class="view"></section>
+</main>
 
 <nav class="tabbar">
-  <button class="tab" data-m="home"><i>▤</i>总览</button>
-  <button class="tab" data-m="key"><i>★</i>重点</button>
-  <button class="tab" data-m="card"><i>▭</i>卡片</button>
-  <button class="tab" data-m="type"><i>⌨</i>默写</button>
-  <button class="tab" data-m="quiz"><i>◈</i>四选一</button>
-  <button class="tab" data-m="list"><i>☰</i>速查</button>
+  <button class="tab on" data-v="home"><i>▤</i>今日</button>
+  <button class="tab" data-v="study"><i>◧</i>背词</button>
+  <button class="tab" data-v="key"><i>★</i>重点</button>
+  <button class="tab" data-v="list"><i>☰</i>词库</button>
+  <button class="tab" data-v="me"><i>◎</i>我的</button>
 </nav>
 
 <script>
 const TERMS = [{"zh":"环境监测","en":"Environmental Monitoring","note":"测定代表值，判断质量与趋势","ch":1,"supp":false},{"zh":"环境背景值","en":"Environment background value","note":"未受污染时的基线值","ch":1,"supp":false},{"zh":"采样点","en":"sampling point","note":"断面上真正取水的位置","ch":1,"supp":false},{"zh":"瞬时水样","en":"Snap sample","note":"某一刻单瓶水，只代表那一刻","ch":1,"supp":false},{"zh":"混合水样","en":"Mixed sample","note":"同一点不同时刻水样合并","ch":1,"supp":false},{"zh":"综合水样","en":"Integrated sample","note":"不同点同时刻水样合并","ch":1,"supp":false},{"zh":"准确度","en":"Good accuracy / High accuracy","note":"与真值差多少，看相对误差","ch":1,"supp":false},{"zh":"精密度","en":"Stable and high precision","note":"重复做几次散不散","ch":1,"supp":false},{"zh":"空白试验","en":"Control test","note":"不加样品的一份，扣本底","ch":1,"supp":false},{"zh":"水质监测","en":"Water Quality Monitoring","note":"测水体的质量与污染程度","ch":2,"supp":false},{"zh":"监测方案","en":"Water quality monitoring program","note":"定项目、断面、时间频率","ch":2,"supp":false},{"zh":"背景断面","en":"Background section","note":"几乎未受人类活动的河段","ch":2,"supp":false},{"zh":"对照断面","en":"Comparison section","note":"流入河段前的水质起点","ch":2,"supp":false},{"zh":"控制断面","en":"Control section","note":"排污口下游混匀处","ch":2,"supp":false},{"zh":"削减断面","en":"Cut-down section","note":"自净后浓度明显降低处","ch":2,"supp":false},{"zh":"垂直断面线","en":"Layout of vertical lines on a cross-section","note":"断面上按水深布垂线","ch":2,"supp":false},{"zh":"表层水","en":"Surface water","note":"水面下 0.3～0.5 m 处的水","ch":2,"supp":false},{"zh":"深层水","en":"Deep water","note":"用带重锤的采样器取","ch":2,"supp":false},{"zh":"采样器","en":"Sampler with weight","note":"沉到指定深度再开塞","ch":2,"supp":false},{"zh":"水样采集和保存","en":"Collection and preservation","note":"取样与存样两件事","ch":2,"supp":false},{"zh":"水样保存方法","en":"Preservation method","note":"冷藏、加抑制剂、调 pH","ch":2,"supp":false},{"zh":"冷藏或冷冻法","en":"Cooling treatment","note":"抑微生物、减慢反应","ch":2,"supp":false},{"zh":"化学试剂保存法","en":"Chemical inhibitor","note":"加抑制剂、氧化还原剂","ch":2,"supp":false},{"zh":"水样预处理","en":"Pretreatment of water","note":"消解、富集、分离的前处理","ch":2,"supp":false},{"zh":"消解","en":"Digestion","note":"破坏有机物，解放无机元素","ch":2,"supp":false},{"zh":"湿式消解法","en":"Wet digestion","note":"用酸消解，快而常用","ch":2,"supp":false},{"zh":"干式分解法","en":"dry decomposition","note":"干灰化，500～900 ℃ 烧","ch":2,"supp":false},{"zh":"溶剂萃取法","en":"Solvent extraction","note":"用有机溶剂把组分抽走","ch":2,"supp":false},{"zh":"固相萃取法","en":"Solid Phase Extraction, SPE","note":"固体萃取剂留住目标物","ch":2,"supp":false},{"zh":"离子交换法","en":"Ion exchange","note":"树脂按电荷换出离子","ch":2,"supp":false},{"zh":"共沉淀法","en":"Coprecipitation","note":"借沉淀带下痕量组分","ch":2,"supp":false},{"zh":"物理指标检验","en":"Physical parameter test","note":"水温色度浊度这些","ch":2,"supp":false},{"zh":"臭和味","en":"Odor and Taste","note":"感官指标，测臭阈值","ch":2,"supp":false},{"zh":"色度","en":"Chroma","note":"真色与表色，铂钴比色","ch":2,"supp":false},{"zh":"浊度","en":"Turbidity","note":"不溶物挡光的程度","ch":2,"supp":false},{"zh":"透明度","en":"Transparency","note":"水样的澄清程度","ch":2,"supp":false},{"zh":"固体物","en":"Solids","note":"可溶与不溶物的总称","ch":2,"supp":false},{"zh":"悬浮物","en":"（SS）","note":"滤后截留在滤器上的固体","ch":2,"supp":false},{"zh":"溶解固体物","en":"（DS）","note":"滤液蒸干后增加的重量","ch":2,"supp":false},{"zh":"矿化度","en":"Degree of mineralization","note":"水中总含盐量","ch":2,"supp":false},{"zh":"电导率","en":"Electrical conductivity","note":"溶解离子的多少","ch":2,"supp":false},{"zh":"氧化还原电位","en":"Redox potential","note":"正为氧化性，负为还原性","ch":2,"supp":false},{"zh":"溶解氧","en":"DO","note":"水里溶解的氧，现场测","ch":2,"supp":false},{"zh":"生化需氧量","en":"（BOD）","note":"微生物分解耗的氧","ch":2,"supp":false},{"zh":"化学需氧量","en":"Chemical oxygen demand (COD)","note":"化学氧化剂耗掉的氧","ch":2,"supp":false},{"zh":"高锰酸盐指数","en":"IMn","note":"高锰酸钾氧化的耗氧量","ch":2,"supp":false},{"zh":"总有机碳","en":"Total organic carbon, TOC","note":"烧出来的有机碳总量","ch":2,"supp":false},{"zh":"总需氧量","en":"Total oxygen demand, TOD","note":"全部可氧化物的需氧量","ch":2,"supp":false},{"zh":"干扰","en":"Interference","note":"别的组分让你读数偏高","ch":2,"supp":false},{"zh":"原子吸收光谱法","en":"Atomic absorption spectrum, AAS","note":"基态原子吸收特征谱线","ch":2,"supp":false},{"zh":"原子发射光谱法","en":"Atomic emission spectrum, AES","note":"受激原子放出特征光","ch":2,"supp":false},{"zh":"电感耦合等离子体","en":"Inductively coupled plasma","note":"ICP 的光源","ch":2,"supp":false},{"zh":"气相色谱法","en":"GC","note":"气体流动相带着样品走","ch":2,"supp":false},{"zh":"质谱法","en":"Mass spectrometry, MS","note":"按质荷比分离离子","ch":2,"supp":false},{"zh":"离子色谱法","en":"Ion chromatography, IC","note":"阴离子分析的主力","ch":2,"supp":false},{"zh":"基态原子","en":"ground state atoms","note":"能吸收共振线的那些原子","ch":2,"supp":false},{"zh":"空气和废气监测","en":"Air and exhaust gas monitoring","note":"环境空气加烟囱废气","ch":3,"supp":false},{"zh":"空气污染","en":"Air pollution","note":"污染物进入大气造成危害","ch":3,"supp":false},{"zh":"一次污染物","en":"Primary pollutant","note":"直接排出来的那种","ch":3,"supp":false},{"zh":"二次污染物","en":"Secondary pollutant","note":"排出来以后变出来的","ch":3,"supp":false},{"zh":"降尘","en":"Dust fall","note":"粒径 >100\\,μm，易沉降","ch":3,"supp":false},{"zh":"总悬浮颗粒物","en":"Total suspended particulate matter（TSP）","note":"粒径 <100\\,μm 的全部","ch":3,"supp":false},{"zh":"可吸入颗粒物","en":"Inhalable particulate matter（PM10）","note":"粒径 <10\\,μm","ch":3,"supp":false},{"zh":"细颗粒物","en":"Fine particulate matter（PM2.5）","note":"粒径 <2.5\\,μm","ch":3,"supp":false},{"zh":"空气质量指数","en":"Air quality index, AQI","note":"无量纲，六项取最大","ch":3,"supp":false},{"zh":"功能区布点法","en":"Functional area setting method","note":"分区各设若干点","ch":3,"supp":false},{"zh":"网格布点法","en":"Grid setting method","note":"多源均匀分布时用","ch":3,"supp":false},{"zh":"同心圆布点法","en":"Concentric circle setting method","note":"大源集中时，绕圆布点","ch":3,"supp":false},{"zh":"扇形布点法","en":"Fan-shaped setting method","note":"孤立高架源、风向明确","ch":3,"supp":false},{"zh":"直接采样法","en":"Direct sampling method","note":"浓度高、方法灵敏时用","ch":3,"supp":false},{"zh":"富集采样法","en":"Enrichment sampling method","note":"浓度低时先把样抓住","ch":3,"supp":false},{"zh":"溶液吸收法","en":"Solution absorption method","note":"让气通过吸收液","ch":3,"supp":false},{"zh":"填充柱阻留法","en":"Column retention method","note":"吸附、分配、反应三种柱","ch":3,"supp":false},{"zh":"滤料阻留法","en":"Filter retention method","note":"颗粒物挡在滤料上","ch":3,"supp":false},{"zh":"低温冷凝法","en":"Low temperature condensation","note":"低沸点有机物冷凝下来","ch":3,"supp":false},{"zh":"静电沉降法","en":"Electrostatic sedimentation","note":"靠电场捕集颗粒物","ch":3,"supp":false},{"zh":"自然积集法","en":"Natural integration","note":"靠重力自然沉降","ch":3,"supp":false},{"zh":"采样效率","en":"Sampling efficiency","note":"采到的量占总量的百分数","ch":3,"supp":false},{"zh":"标准状态","en":"standard state","note":"273 K、101.325 kPa 的干气体","ch":3,"supp":false},{"zh":"二氧化硫","en":"SO2","note":"溶液吸收或紫外荧光法测","ch":3,"supp":false},{"zh":"氮氧化物","en":"NOx","note":"分光或化学发光法测","ch":3,"supp":false},{"zh":"一氧化碳","en":"CO","note":"非色散红外吸收法","ch":3,"supp":false},{"zh":"臭氧","en":"O3","note":"与 NOx 并列的必测项","ch":3,"supp":false},{"zh":"光化学氧化剂","en":"Photochemical oxidant","note":"总氧化剂减去 0.269 倍 NOx","ch":3,"supp":false},{"zh":"硫酸盐化速率","en":"sulfation rate","note":"碱性表面吸收 SO2 的速率","ch":3,"supp":false},{"zh":"非甲烷总烃","en":"non-methyl hydrocarbons (NMHC)","note":"总烃扣掉甲烷","ch":3,"supp":false},{"zh":"挥发性有机物","en":"volatile organic compounds","note":"蒸气压大于 133.32 Pa","ch":3,"supp":false},{"zh":"动压","en":"dynamic pressure (Pv）","note":"单位体积气流的动能","ch":3,"supp":false},{"zh":"烟气含湿量","en":"Determination of moisture content","note":"重量、冷凝、干湿球三法","ch":3,"supp":false}];
 
-const LS = "hjjc.terms.v2";
-const store = JSON.parse(localStorage.getItem(LS) || '{"known":{},"wrong":{},"seen":{}}');
-const save = () => localStorage.setItem(LS, JSON.stringify(store));
-
-const CHNAME = {1:"第 1 章 总论与标准", 2:"第 2 章 水和废水", 3:"第 3 章 空气和废气"};
-const hasEn = t => /[A-Za-z]/.test(t.en || "");
-const cjkCount = s => (s.match(/[\u4e00-\u9fff]/g) || []).length;
-const typeable = t => hasEn(t) && cjkCount(t.en) === 0 && t.en.length <= 45;
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const state = {ch:0, f:null, mode:"home", dir:"zh", queue:[], i:0, revealed:false, answered:false};
-document.addEventListener("DOMContentLoaded", () => { const n = document.getElementById("nTot"); if (n) n.textContent = TERMS.length; });
-
-/* ---------- 重点栏（考前只背这些） ---------- */
 const KEY = [
   {g:"数字：记住了就能填空", rows:[
     ["河流削减断面设在排污口下游 <em>1500 m</em> 以外", "2-1"],
@@ -297,350 +208,416 @@ const KEY = [
     ["<em>standard solution</em>　标准溶液｜<em>blank</em> 空白", "中频"]
   ]}
 ];
-const keyCount = () => KEY.reduce((n, g) => n + g.rows.length, 0);
-const keyDone = () => { const s = store.key || {}; return KEY.reduce((n, g) => n + g.rows.filter(r => s[r[0]]).length, 0); };
 
-/* ---------- 取题 ---------- */
-function pool(){
-  let p = TERMS.filter(t => !state.ch || t.ch === state.ch);
-  if (state.f === "wrong") p = p.filter(t => store.wrong[t.zh]);
-  if (state.mode === "type" || state.mode === "quiz") p = p.filter(typeable);
-  if (state.dir === "zh") p = p.filter(hasEn);
-  return p;
-}
-function shuffle(a){
-  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
-  return a;
-}
-function build(shuffleIt){
-  if (state.mode === "home"){ showHome(); return; }
-  if (state.mode === "key"){ showKey(); return; }
-  let p = pool().slice();
-  if (state.mode === "list"){
-    p.sort((a, b) => (a.ch - b.ch) || (TERMS.indexOf(a) - TERMS.indexOf(b)));
-  } else {
-    if (shuffleIt !== false) shuffle(p);
-    if (state.f !== "wrong") p.sort((a, b) => (store.wrong[b.zh] ? 1 : 0) - (store.wrong[a.zh] ? 1 : 0));
-  }
-  state.queue = p; state.i = 0;
-  if (!p.length){
-    ["answer","acts","quiz","type","front","sub","qtag"].forEach(id => $(id).style.display = "none");
-    $("end").style.display = "block";
-    $("endTxt").textContent = "这个筛选下没有词条。换个筛选看看。";
-    $("btnAgain").style.display = "none";
-    updateStat();
-    return;
-  }
-  render();
-}
+const EXAM = new Date(2026, 10, 17);
+const DAY = 86400000;
+const LSKEY = 'hjjc.srs.v2';
+const CHNAME = {1:'第 1 章 总论与标准', 2:'第 2 章 水和废水', 3:'第 3 章 空气和废气'};
 
-/* ---------- 渲染 ---------- */
 const $ = id => document.getElementById(id);
-const GAME = ["qtag","front","sub","answer","acts","quiz","type","list","key","end","home"];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dk = (ts) => { const d = new Date(ts == null ? Date.now() : ts);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+const daysBetween = (a, b) => Math.round((new Date(b) - new Date(a)) / DAY);
 
-function render(){
-  if (state.mode === "home"){ showHome(); return; }
-  if (state.mode === "key"){ showKey(); return; }
-  if (state.mode === "list"){ showList(); return; }
-  $("home").style.display = "none"; $("list").style.display = "none"; $("key").style.display = "none";
-  const t = state.queue[state.i];
-  const isEnd = !t;
-  $("end").style.display = isEnd ? "block" : "none";
-  ["qtag","front","sub","answer","acts"].forEach(k => $(k).style.display = isEnd ? "none" : "");
-  $("quiz").style.display = "none"; $("type").style.display = "none";
-  if (isEnd){
-    $("endTxt").textContent = `走完 ${state.queue.length} 条。错题本里现有 ${Object.keys(store.wrong).length} 条。`;
-    $("btnAgain").style.display = "";
-    updateStat();
+function defState(){
+  return {v:2, cfg:{daily:30, newPerDay:15}, card:{}, key:{}, log:{}, streak:0, best:0, lastDay:''};
+}
+let S = defState();
+try {
+  const raw = localStorage.getItem(LSKEY);
+  if (raw){ const o = JSON.parse(raw); if (o && o.v === 2) S = o; }
+} catch (e) {}
+if (!S.cfg) S.cfg = {daily:30, newPerDay:15};
+save();
+function save(){ try { localStorage.setItem(LSKEY, JSON.stringify(S)); } catch (e) {} }
+
+/* ---------- 记忆模型 ---------- */
+const cardOf = t => S.card[t.zh];
+const isMaster = t => { const c = cardOf(t); return !!c && c.i >= 21; };
+const isLearning = t => { const c = cardOf(t); return !!c && c.i > 0 && c.i < 21; };
+const dueList = () => TERMS.filter(t => { const c = cardOf(t); return c && c.due <= Date.now(); });
+const newDoneToday = () => Object.keys(S.card).filter(k => dk(S.card[k].first) === dk()).length;
+const logToday = () => S.log[dk()] || (S.log[dk()] = {n:0, good:0, hard:0, bad:0});
+const todayDone = () => (S.log[dk()] || {n:0}).n;
+const examLeft = () => Math.max(0, Math.ceil((EXAM - new Date(dk())) / DAY));
+
+function grade(t, k){
+  const now = Date.now();
+  let c = S.card[t.zh];
+  if (!c) c = S.card[t.zh] = {i:0, e:2.5, due:0, r:0, l:0, first:now, last:now};
+  c.last = now;
+  if (k === 'good'){ c.r++; c.e = Math.min(3.0, c.e + 0.1); c.i = c.i ? Math.max(1, Math.round(c.i * c.e)) : 1; c.due = now + c.i * DAY; }
+  else if (k === 'hard'){ c.r++; c.e = Math.max(1.3, c.e - 0.15); c.i = c.i ? Math.max(1, Math.round(c.i * 1.2)) : 1; c.due = now + c.i * DAY; }
+  else { c.l++; c.e = Math.max(1.3, c.e - 0.2); c.i = 0; c.due = now; }
+  const L = logToday(); L.n++; L[k] = (L[k] || 0) + 1;
+  if (S.lastDay !== dk()){
+    S.streak = (S.lastDay && daysBetween(S.lastDay, dk()) === 1) ? S.streak + 1 : 1;
+    S.lastDay = dk();
+    if (S.streak > S.best) S.best = S.streak;
+  }
+  save();
+}
+
+/* ---------- 会话 ---------- */
+let Q = null, Qpos = 0, cur = null, revealed = false, sess = null;
+
+function buildQueue(){
+  const now = Date.now();
+  const rev = TERMS.filter(t => { const c = cardOf(t); return c && c.due <= now; })
+                  .sort((a, b) => cardOf(a).due - cardOf(b).due);
+  const quota = Math.max(0, S.cfg.newPerDay - newDoneToday());
+  const news = TERMS.filter(t => !cardOf(t)).slice(0, quota);
+  Q = rev.map(t => ({t, kind:'复习'})).concat(news.map(t => ({t, kind:'新词'})));
+  Qpos = 0; cur = null; revealed = false;
+  sess = {n:0, good:0, hard:0, bad:0, total:Q.length};
+}
+
+function nextCard(){
+  if (Qpos >= Q.length){ cur = null; revealed = false; renderStudy(); return; }
+  cur = Q[Qpos++]; revealed = false; renderStudy();
+}
+
+function gradeCur(k){
+  if (!cur) return;
+  const t = cur.t;
+  grade(t, k);
+  sess.n++; sess[k] = (sess[k] || 0) + 1;
+  if (k !== 'good'){
+    const at = Math.min(Q.length, Qpos + 4);
+    Q.splice(at, 0, {t, kind:'再一遍'});
+  }
+  renderHeader();
+  nextCard();
+}
+
+/* ---------- 今日 ---------- */
+function cal14(){
+  let out = '';
+  for (let i = 13; i >= 0; i--){
+    const d = dk(Date.now() - i * DAY);
+    const n = (S.log[d] || {}).n || 0;
+    const cls = n === 0 ? '' : (n >= 30 ? 'd3' : (n >= 12 ? 'd2' : 'd1'));
+    out += '<i class="' + cls + (i === 0 ? ' today' : '') + '">' + (n || '') + '</i>';
+  }
+  return out;
+}
+
+function renderHome(){
+  const done = todayDone();
+  const goal = S.cfg.daily;
+  const due = dueList().length;
+  const quota = Math.max(0, S.cfg.newPerDay - newDoneToday());
+  const newLeft = TERMS.filter(t => !cardOf(t)).length;
+  const master = TERMS.filter(isMaster).length;
+  const left = examLeft();
+  const todo = Math.min(quota, newLeft) + Math.min(due, goal);
+  const plan = Math.max(1, Math.min(goal, todo + done));
+  const p = Math.min(100, Math.round(done / plan * 100));
+  const started = todo > 0;
+  $('v-home').innerHTML = `
+  <div class="card">
+    <div class="hero">
+      <div class="ring" style="--p:${p}"><b>${done}</b><u>/${plan}</u></div>
+      <div class="hmeta">
+        <div class="l1">${done >= goal ? '今天的量做完了' : (done ? '今天已背 ' + done + ' 条' : '今天还没开始')}</div>
+        <div class="l2">待复习 <b>${due}</b> 条 · 今日新词还剩 <b>${Math.min(quota, newLeft)}</b> 条<br>离考试还有 <b>${left}</b> 天</div>
+      </div>
+    </div>
+    <div class="hpills">
+      <div class="hpill acc"><b>${S.streak}</b><span>连续天数</span></div>
+      <div class="hpill grn"><b>${master}</b><span>已熟练</span></div>
+      <div class="hpill"><b>${TERMS.length - master}</b><span>还要过</span></div>
+    </div>
+    <button class="btn main wide" id="goStudy" style="margin-top:12px">${started ? (done ? '继续背今天这批' : '开始今天的 ' + (Math.min(quota, newLeft) + Math.min(due, goal)) + ' 条') : '今天没有任务了'}</button>
+    ${started ? '' : '<div class="muted" style="text-align:center;margin-top:8px">要么都复习完了，要么到点在等下次复习。想加练可以点下面的「全部再过一遍」。</div>'}
+    <button class="btn wide" id="goExtra" style="margin-top:8px">全部再过一遍（不限计划）</button>
+  </div>
+
+  <div class="hsec">最近 14 天</div>
+  <div class="cal">${cal14()}</div>
+  <div class="calx"><span>13 天前</span><span>今天</span></div>
+
+  <div class="hsec">现在的进度</div>
+  <div class="card">
+    ${[1,2,3].map(ch => {
+      const arr = TERMS.filter(t => t.ch === ch);
+      const m = arr.filter(isMaster).length;
+      const l = arr.filter(isLearning).length;
+      return `<div class="row"><div class="rt">${CHNAME[ch]}<div class="rs">已熟练 ${m} · 学习中 ${l} · 共 ${arr.length} 条</div></div>
+        <div class="rs">${Math.round(m / arr.length * 100)}%</div></div>`;
+    }).join('')}
+  </div>
+
+  <div class="hsec">说明</div>
+  <div class="card muted">
+    背词按记忆曲线排：认识的往后推，模糊的过几天再来，不认识的当场回炉。<br>
+    考试 2026-11-17（周二）闭卷。这里只收课件上真写出来的条目，英文照老师原文。<br>
+    进度只存在这台手机的浏览器里，换设备不同步。想随时点开：浏览器菜单里选「添加到主屏幕」。
+  </div>`;
+
+  const go = (extra) => { buildQueue(); if (extra){ Q = TERMS.map(t => ({t, kind:'加练'})); Qpos = 0; }
+    cur = null; nextCard(); go2('study'); };
+  $('goStudy').onclick = () => go(false);
+  $('goExtra').onclick = () => go(true);
+}
+
+function go2(v){
+  document.querySelectorAll('.view').forEach(x => x.classList.remove('on'));
+  $('v-' + v).classList.add('on');
+  document.querySelectorAll('.tab').forEach(x => x.classList.toggle('on', x.dataset.v === v));
+  window.scrollTo(0, 0);
+  if (v === 'home') renderHome();
+  if (v === 'key') renderKey();
+  if (v === 'list') renderList();
+  if (v === 'me') renderMe();
+}
+
+/* ---------- 背词 ---------- */
+function renderStudy(){
+  const box = $('v-study');
+  if (!Q){ box.innerHTML = `<div class="card sdone">
+      <div class="big">▤</div><h2>先回今日</h2>
+      <div class="muted">点下面开始，队列会按记忆曲线排好。</div>
+      <button class="btn main wide" id="sStart" style="margin-top:16px">开始背</button></div>`;
+    $('sStart').onclick = () => { buildQueue(); nextCard(); };
     return;
   }
-  state.revealed = false; state.answered = false;
-  const askZh = (state.mode !== "card") || state.dir === "zh";
-  $("qtag").innerHTML = `<b>第 ${t.ch} 章</b> &nbsp; &nbsp;<span style="opacity:.6">${state.i + 1} / ${state.queue.length}</span>`;
-  $("front").className = askZh ? "" : "en";
-  $("front").textContent = askZh ? t.zh : t.en;
-  $("sub").textContent = state.mode === "card" ? (askZh ? "先在心里说出英文，再翻面" : "这是英文，想想它对应哪个中文术语") : "";
-  $("answer").className = ""; $("ansMain").className = askZh ? "" : "zh";
-  $("ansMain").textContent = askZh ? t.en : t.zh;
-  $("ansNote").textContent = t.note || "";
-  $("btnReveal").style.display = (state.mode === "quiz") ? "none" : ""; $("btnNo").style.display = "none"; $("btnOk").style.display = "none";
-  $("btnReveal").textContent = "翻面 ␣";
-
-  if (state.mode === "type") startType(t);
-  if (state.mode === "quiz") startQuiz(t);
-  updateStat();
-}
-
-/* ---------- 总览 ---------- */
-function knownIn(ch){ return TERMS.filter(t => t.ch === ch && store.known[t.zh]).length; }
-function totalIn(ch){ return TERMS.filter(t => t.ch === ch).length; }
-
-function showHome(){
-  GAME.forEach(id => $(id).style.display = "none");
-  const box = $("home"); box.style.display = "block";
-  const known = Object.keys(store.known).length;
-  const wrong = Object.keys(store.wrong).length;
-  const rest = TERMS.length - known;
-
-  let chRows = "";
-  [1,2,3].forEach(ch => {
-    const tot = totalIn(ch), k = knownIn(ch), pct = Math.round(k / tot * 100);
-    chRows += `<div class="chrow" data-ch="${ch}">
-      <div class="nm">${CHNAME[ch]}</div>
-      <div class="minibar"><i style="width:${pct}%"></i></div>
-      <div class="n">${k}/${tot}</div></div>`;
-  });
-
-  let details = "";
-  [1,2,3].forEach(ch => {
-    const rows = TERMS.filter(t => t.ch === ch).map(t =>
-      `<div class="row"><div class="rz">${esc(t.zh)}</div>` +
-      `<div class="re">${esc(t.en || "—")}</div>` +
-      (t.note ? `<div class="rn">${esc(t.note)}</div>` : "") + `</div>`).join("");
-    details += `<details><summary>${CHNAME[ch]} · ${totalIn(ch)} 条（已掌握 ${knownIn(ch)}）</summary><div class="dbody">${rows}</div></details>`;
-  });
-
+  if (!cur){
+    const acc = sess.n ? Math.round((sess.good + sess.hard) / sess.n * 100) : 0;
+    box.innerHTML = `<div class="card sdone">
+      <div class="big">✓</div>
+      <h2>这一轮走完了</h2>
+      <div class="muted">背了 <b>${sess.n}</b> 条 · 认识 ${sess.good} · 模糊 ${sess.hard} · 不认识 ${sess.bad}<br>这一轮的认识率 ${acc}%</div>
+      <button class="btn main wide" id="sAgain" style="margin-top:16px">按计划再来一轮</button>
+      <button class="btn wide" id="sHome" style="margin-top:8px">回今日看进度</button>
+      <div class="muted" style="margin-top:14px">明天这时候，今天「认识」的会自动排进来复习。</div>
+    </div>`;
+    $('sAgain').onclick = () => { buildQueue(); nextCard(); };
+    $('sHome').onclick = () => go2('home');
+    return;
+  }
+  const t = cur.t;
+  const c = cardOf(t);
+  const idx = (Qpos) + ' / ' + Q.length;
   box.innerHTML = `
-    <div class="hcards">
-      <div class="hc"><b>${known}</b><span>已掌握</span></div>
-      <div class="hc"><b>${rest}</b><span>还没记住</span></div>
-      <div class="hc acc"><b>${wrong}</b><span>错题本</span></div>
+  <div class="card scard">
+    <div class="stag">
+      <span>${idx}</span>
+      <span>第 ${t.ch} 章</span>
+      <span class="k ${cur.kind === '新词' ? '' : 'rev'}">${cur.kind}</span>
+      ${c && c.i ? `<span>上次间隔 ${c.i} 天</span>` : ''}
     </div>
-    <div class="hsec">按章看（点一行就开始背这一章）</div>
-    ${chRows}
-    <div class="hsec">现在去</div>
-    <div class="qbtn">
-      <button class="main" data-go="card">接着背</button>
-      <button data-go="wrong">只刷错题${wrong ? "（" + wrong + "）" : ""}</button>
-      <button data-go="key">★ 重点栏 ${keyDone()}/${keyCount()}</button>
-    </div>
-    <div class="hsec">全部 ${TERMS.length} 条（点开看）</div>
-    ${details}
-    <div class="note">考试 2026-11-17（周二）闭卷。这里只收课件上真写出来的条目，英文照老师原文，没有一处是我自己翻的。进度只存在这台手机的浏览器里，换设备不同步。<br>想随时点开：浏览器菜单里选「添加到主屏幕」，之后就像 App 一样一按就开。</div>`;
-
-  box.querySelectorAll(".chrow").forEach(el => el.onclick = () => {
-    const ch = +el.dataset.ch;
-    document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
-    document.querySelector(`#fCh .chip[data-ch="${ch}"]`).classList.add("on");
-    state.ch = ch; state.f = null;
-    setMode("card", true);
-  });
-  box.querySelectorAll("[data-go]").forEach(el => el.onclick = () => {
-    const go = el.dataset.go;
-    if (go === "card"){ setMode("card", true); return; }
-    if (go === "key"){ setMode("key", true); return; }
-    document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
-    document.querySelector(`#fCh .chip[data-f="${go}"]`).classList.add("on");
-    state.f = go; state.ch = 0;
-    setMode("card", true);
-  });
-  updateStat();
+    <div class="szh${t.zh.length > 9 ? ' small' : ''}">${esc(t.zh)}</div>
+    <div class="sen" id="sen" style="display:${revealed ? 'block' : 'none'}">${esc(t.en)}</div>
+    <div class="snt" id="snt" style="display:${revealed ? 'block' : 'none'}">${esc(t.note || '')}</div>
+    <div class="sgap"></div>
+    ${revealed
+      ? `<div class="sbtns">
+           <button class="b1" data-k="bad">不认识<kbd>1</kbd></button>
+           <button class="b2" data-k="hard">模糊<kbd>2</kbd></button>
+           <button class="b3" data-k="good">认识<kbd>3</kbd></button>
+         </div>`
+      : `<button class="btn main wide" id="sReveal">显示答案<kbd>空格</kbd></button>`}
+  </div>
+  <div class="muted" style="text-align:center;margin-top:10px">
+    ${revealed ? '认识 → 下次隔很久｜模糊 → 过几天再来｜不认识 → 这一轮里还会出现' : '先在心里说出英文，再显示答案'}
+  </div>`;
+  if (!revealed) $('sReveal').onclick = () => { revealed = true; renderStudy(); };
+  else box.querySelectorAll('.sbtns button').forEach(b => b.onclick = () => gradeCur(b.dataset.k));
 }
 
-/* ---------- 重点栏 ---------- */
-function showKey(){
-  ["qtag","front","sub","answer","acts","quiz","type","list","end","home"].forEach(k => $(k).style.display = "none");
-  const el = $("key"); el.style.display = "block";
-  const s = store.key || {};
-  let html = `<div class="kh">共 ${keyCount()} 条 · 已记 <b>${keyDone()}</b> 条（点一下划掉，记过的会存着）</div>`;
+/* ---------- 重点 ---------- */
+function keyDone(){ return Object.keys(S.key || {}).length; }
+function renderKey(){
+  let n = 0; KEY.forEach(g => g.rows.forEach(() => n++));
+  let html = `<div class="kh">共 ${n} 条 · 已记 <b>${keyDone()}</b> 条（点一下划掉，记过的会存着）</div>`;
   KEY.forEach((g, gi) => {
-    html += `<div class="kg">${esc(g.g)}</div>`;
+    html += `<div class="kg">${g.g}</div>`;
     g.rows.forEach((r, ri) => {
-      const k = gi + "#" + ri;
-      html += `<div class="ki${s[k] ? " done" : ""}" data-k="${k}">` +
-              `<div class="ck">✓</div><div class="tx"><span class="src">${esc(r[1])}</span>${r[0]}</div></div>`;
+      const k = gi + '#' + ri;
+      html += `<div class="ki${S.key[k] ? ' done' : ''}" data-k="${k}">` +
+              `<div class="ck">✓</div><div class="tx">${r[0]}<span class="src">${esc(r[1])}</span></div></div>`;
     });
   });
-  el.innerHTML = html;
-  el.querySelectorAll(".ki").forEach(n => n.onclick = () => {
-    const k = n.dataset.k;
-    store.key = store.key || {};
-    if (store.key[k]) delete store.key[k]; else store.key[k] = 1;
-    save(); n.classList.toggle("done", !!store.key[k]); updateStat();
-  });
-  updateStat();
-}
-
-/* ---------- 速查表 ---------- */
-function showList(){
-  $("home").style.display = "none"; $("end").style.display = "none"; $("key").style.display = "none";
-  ["qtag","front","sub","answer","acts","quiz","type"].forEach(k => $(k).style.display = "none");
-  const el = $("list"); el.style.display = "block";
-  const rows = state.queue.map(t =>
-    `<div class="row"><div class="rz">${esc(t.zh)}</div>` +
-    `<div class="re">${esc(t.en || "—")}</div>` +
-    (t.note ? `<div class="rn">${esc(t.note)}</div>` : "") + `</div>`).join("");
-  el.innerHTML = `<div class="lh">共 ${state.queue.length} 条 · 按当前筛选</div>` + rows;
-  updateStat();
-}
-
-function updateStat(){
-  const known = Object.keys(store.known).length;
-  const wrong = Object.keys(store.wrong).length;
-  $("stat").textContent = `掌握 ${known}/${TERMS.length} · 错 ${wrong}`;
-  $("prog").style.width = (known / TERMS.length * 100) + "%";
-}
-
-/* ---------- 卡片 ---------- */
-function reveal(){
-  state.revealed = true;
-  $("answer").className = "show";
-  $("btnReveal").style.display = "none";
-  $("btnNo").style.display = ""; $("btnOk").style.display = "";
-}
-function grade(ok){
-  const t = state.queue[state.i];
-  if (!t) return;
-  if (ok){
-    store.known[t.zh] = 1;
-    if (store.wrong[t.zh]) delete store.wrong[t.zh];
-  } else {
-    delete store.known[t.zh];
-    store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1;
-  }
-  save(); next();
-}
-function next(){
-  state.i++;
-  render();
-}
-function prev(){ if (state.i > 0){ state.i--; render(); } }
-
-/* ---------- 默写 ---------- */
-function startType(t){
-  state.answered = false;
-  $("type").style.display = "block";
-  $("answer").className = "";
-  $("btnReveal").style.display = ""; $("btnReveal").textContent = "看答案 ␣";
-  const inp = $("tinput"); inp.value = ""; $("fb").textContent = ""; $("fb").className = "";
-  if (window.innerWidth > 600) setTimeout(() => inp.focus(), 30);
-}
-const norm = s => s.toLowerCase().replace(/[\s\-—–_.,;:()（）\[\]〔〕'’"“”]/g, "").replace(/μ/g, "u");
-function submitType(){
-  const t = state.queue[state.i];
-  if (!t) return;
-  const inp = $("tinput");
-  if (state.answered){ next(); return; }
-  const v = inp.value.trim();
-  if (!v){ return; }
-  const good = norm(v) === norm(t.en);
-  const close = !good && (norm(t.en).includes(norm(v)) && norm(v).length >= norm(t.en).length * .8);
-  $("fb").className = good ? "good" : "bad";
-  $("fb").textContent = good ? "对。" : (close ? "接近了，差一点。" : "不对。");
-  $("ansMain").textContent = t.en; $("ansNote").textContent = t.note || "";
-  $("answer").className = "show";
-  state.answered = true;
-  if (good){ store.known[t.zh] = 1; delete store.wrong[t.zh]; }
-  else { delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; }
-  save(); updateStat();
-  $("btnReveal").style.display = "none"; $("btnNo").style.display = "none"; $("btnOk").style.display = "";
-  $("btnOk").textContent = "下一条 ␣";
-}
-
-/* ---------- 四选一 ---------- */
-function startQuiz(t){
-  state.answered = false;
-  const box = $("quiz"); box.style.display = "flex"; box.innerHTML = "";
-  const others = shuffle(TERMS.filter(x => x.zh !== t.zh && typeable(x) && x.en !== t.en)).slice(0, 3).map(x => x.en);
-  const opts = shuffle([t.en, ...others]);
-  opts.forEach(o => {
-    const b = document.createElement("button");
-    b.className = "opt"; b.textContent = o;
-    b.onclick = () => {
-      if (state.answered) return;
-      state.answered = true;
-      const good = o === t.en;
-      [...box.children].forEach(c => {
-        if (c.textContent === t.en) c.classList.add("right");
-        else if (c === b) c.classList.add("wrong");
-      });
-      if (good){ store.known[t.zh] = 1; delete store.wrong[t.zh]; }
-      else { delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; }
-      save(); updateStat();
-      $("ansNote").textContent = t.note || "";
-      $("btnOk").style.display = ""; $("btnOk").textContent = "下一条 ␣";
-    };
-    box.appendChild(b);
+  $('v-key').innerHTML = `<div class="hsec">考前只背这些</div><div class="card">${html}</div>`;
+  $('v-key').querySelectorAll('.ki').forEach(el => el.onclick = () => {
+    const k = el.dataset.k;
+    S.key = S.key || {};
+    if (S.key[k]) delete S.key[k]; else S.key[k] = 1;
+    save(); el.classList.toggle('done', !!S.key[k]); renderHeader();
   });
 }
 
-/* ---------- 模式切换 ---------- */
-function setMode(m, rebuild){
-  state.mode = m;
-  document.querySelectorAll(".tabbar .tab").forEach(x => x.classList.toggle("on", x.dataset.m === m));
-  const immersive = (m === "home" || m === "key");
-  $("toolbar").style.display = immersive ? "none" : "";
-  $("hint").style.display = (m === "card" || m === "type" || m === "quiz") ? "" : "none";
-  const HINT = {
-    card: '<span class="kb"><kbd>空格</kbd> 翻面 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp;</span>点上方标签切换模式',
-    type: '<span class="kb"><kbd>回车</kbd> 提交 &nbsp; <kbd>空格</kbd> 下一张 &nbsp;</span>打不出来的就点「看答案」，再选会／不会',
-    quiz: '<span class="kb"><kbd>空格</kbd> 下一题 &nbsp;</span>四条里选一条，选完自动判'
+/* ---------- 词库 ---------- */
+let lf = 'all';
+const STXT = {n:'未学', l:'学习中', m:'熟练', x:'错题'};
+function listFilter(){
+  if (lf === 'new') return TERMS.filter(t => !cardOf(t));
+  if (lf === 'learn') return TERMS.filter(isLearning);
+  if (lf === 'master') return TERMS.filter(isMaster);
+  if (lf === 'wrong') return TERMS.filter(t => cardOf(t) && cardOf(t).l > 0);
+  return TERMS;
+}
+function renderList(){
+  const arr = listFilter();
+  const rows = arr.map(t => {
+    const c = cardOf(t);
+    const st = !c ? 'n' : (c.i >= 21 ? 'm' : 'l');
+    const lbl = c && c.l > 0 ? '错题' : STXT[st];
+    return `<div class="lrow"><div class="z">${esc(t.zh)}</div><div class="e">${esc(t.en)}</div>
+      <div class="st ${st === 'm' ? 'm' : (st === 'l' ? 'n' : '')}">${lbl}</div></div>`;
+  }).join('') || '<div class="muted">这一类里没有词。</div>';
+  $('v-list').innerHTML = `
+  <div class="chips" id="lch">
+    ${[['all','全部 ' + TERMS.length],['new','没学的'],['learn','学习中'],['master','已熟练'],['wrong','错题']]
+      .map(([k, l]) => `<span class="chip${lf === k ? ' on' : ''}" data-f="${k}">${l}</span>`).join('')}
+  </div>
+  <div class="card">${rows}</div>
+  <div class="muted" style="margin-top:10px">「已熟练」指复习间隔已经拉到 21 天以上，考场上基本不会卡。</div>`;
+  $('v-list').querySelectorAll('#lch .chip').forEach(c => c.onclick = () => { lf = c.dataset.f; renderList(); });
+}
+
+/* ---------- 我的 ---------- */
+function renderMe(){
+  const learned = TERMS.filter(t => cardOf(t)).length;
+  const master = TERMS.filter(isMaster).length;
+  const ivs = TERMS.filter(t => cardOf(t) && cardOf(t).i > 0).map(t => cardOf(t).i);
+  const avg = ivs.length ? Math.round(ivs.reduce((a, b) => a + b, 0) / ivs.length) : 0;
+  const totalDays = Object.keys(S.log).filter(d => (S.log[d].n || 0) > 0).length;
+  $('v-me').innerHTML = `
+  <div class="hsec">记忆状况</div>
+  <div class="grid2">
+    <div class="mbox"><b>${learned}</b><span>学过的词</span></div>
+    <div class="mbox"><b>${master}</b><span>已熟练（间隔≥21天）</span></div>
+    <div class="mbox"><b>${avg}</b><span>平均复习间隔（天）</span></div>
+    <div class="mbox"><b>${S.streak}/${S.best}</b><span>连续 / 最长连续</span></div>
+    <div class="mbox"><b>${todayDone()}</b><span>今天背了</span></div>
+    <div class="mbox"><b>${totalDays}</b><span>累计背词天数</span></div>
+  </div>
+
+  <div class="hsec">每天的计划量</div>
+  <div class="card">
+    <div class="row"><div class="rt">每天新词<div class="rs">剩余 ${TERMS.filter(t => !cardOf(t)).length} 条没学</div></div></div>
+    <div class="chips" id="cnew">
+      ${[8,15,25,89].map(n => `<span class="chip${S.cfg.newPerDay === n ? ' on' : ''}" data-n="${n}">${n === 89 ? '全部' : n}</span>`).join('')}
+    </div>
+    <div class="row" style="margin-top:8px"><div class="rt">每天总目标<div class="rs">进度环按这个算</div></div></div>
+    <div class="chips" id="cdaily">
+      ${[20,30,50,89].map(n => `<span class="chip${S.cfg.daily === n ? ' on' : ''}" data-n="${n}">${n === 89 ? '不限' : n}</span>`).join('')}
+    </div>
+  </div>
+
+  <div class="hsec">还想动手写</div>
+  <div class="card">
+    <div class="row"><div class="rt">拼写自测<div class="rs">给中文，打英文；考场上要写英文名字就靠这个</div></div>
+      <button class="btn" id="dType">开始</button></div>
+  </div>
+
+  <div class="hsec">数据</div>
+  <div class="card">
+    <div class="row"><div class="rt">清空进度<div class="rs">回到一条都没学，计划量不变</div></div>
+      <button class="btn" id="reset">清空</button></div>
+  </div>
+  <div class="muted" style="margin-top:10px">考试 2026-11-17（周二）。这里只收课件上真写出来的条目，英文照老师原文，没有一处是自己翻的。</div>`;
+
+  $('v-me').querySelectorAll('#cnew .chip').forEach(c => c.onclick = () => { S.cfg.newPerDay = +c.dataset.n; save(); renderMe(); });
+  $('v-me').querySelectorAll('#cdaily .chip').forEach(c => c.onclick = () => { S.cfg.daily = +c.dataset.n; save(); renderMe(); });
+  $('dType').onclick = () => startDrill();
+  $('reset').onclick = () => {
+    if (confirm('清空所有背词进度？清完就回到一条都没学。')){
+      const keep = {cfg:S.cfg};
+      S = defState(); S.cfg = keep.cfg; save();
+      Q = null; cur = null; renderHeader(); renderMe();
+    }
   };
-  if (HINT[m]) $("hint").innerHTML = HINT[m];
-  if (m === "home"){ showHome(); return; }
-  if (m === "key"){ showKey(); return; }
-  if (m === "list"){ state.queue = pool().slice().sort((a,b) => (a.ch - b.ch) || (TERMS.indexOf(a) - TERMS.indexOf(b))); showList(); return; }
-  build(rebuild !== false);
+}
+
+/* ---------- 拼写自测 ---------- */
+let D = null;
+const norm = s => String(s || '').toLowerCase().replace(/[\s·,，.。()（）\-_/]/g, '');
+const typeable = t => /[A-Za-z]/.test(t.en || '') && !/[\u4e00-\u9fff]/.test(t.en || '') && t.en.length <= 45;
+
+function startDrill(){
+  const pool = TERMS.filter(typeable);
+  const pick = pool.slice().sort(() => Math.random() - 0.5).slice(0, 10);
+  D = {list:pick, i:0, ok:0, shown:null};
+  go2('drill'); renderDrill();
+}
+function renderDrill(){
+  const box = $('v-drill');
+  if (!D || D.i >= D.list.length){
+    box.innerHTML = `<div class="card sdone"><div class="big">⌨</div><h2>拼完了</h2>
+      <div class="muted">这一轮 ${D ? D.list.length : 0} 条，写对 ${D ? D.ok : 0} 条。</div>
+      <button class="btn main wide" id="dAgain" style="margin-top:16px">再来一轮</button>
+      <button class="btn wide" id="dHome" style="margin-top:8px">回我的</button></div>`;
+    $('dAgain').onclick = () => startDrill();
+    $('dHome').onclick = () => go2('me');
+    return;
+  }
+  const t = D.list[D.i];
+  box.innerHTML = `
+  <div class="card">
+    <div class="stag"><span>${D.i + 1} / ${D.list.length}</span><span>${CHNAME[t.ch].slice(0,3)}</span><span class="k">拼写</span></div>
+    <div class="szh${t.zh.length > 9 ? ' small' : ''}" style="margin:22px 0 14px">${esc(t.zh)}</div>
+    <input class="dinput" id="din" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="打出英文，回车提交">
+    <div class="dres" id="dres">${t.note ? esc(t.note) : ''}</div>
+    <div class="sbtns" style="grid-template-columns:1fr 1fr;margin-top:14px">
+      <button class="b1" id="dSkip">不会，看答案</button>
+      <button class="b3" id="dSub">提交</button>
+    </div>
+  </div>`;
+  const inp = $('din');
+  inp.focus();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); submitDrill(); } });
+  $('dSub').onclick = () => submitDrill();
+  $('dSkip').onclick = () => { $('dres').innerHTML = '<b style="color:var(--acc)">' + esc(t.en) + '</b>' + (t.note ? '<br>' + esc(t.note) : ''); D.shown = true; setTimeout(() => { D.i++; renderDrill(); }, 1200); };
+}
+function submitDrill(){
+  const t = D.list[D.i];
+  const v = $('din').value;
+  const ok = norm(v) === norm(t.en);
+  if (ok) D.ok++;
+  $('dres').className = 'dres ' + (ok ? 'ok' : 'no');
+  $('dres').innerHTML = ok ? '✓ 对了：' + esc(t.en) : '✗ 正确写法：<b>' + esc(t.en) + '</b>';
+  $('din').disabled = true;
+  setTimeout(() => { D.i++; renderDrill(); }, ok ? 700 : 1600);
+}
+
+/* ---------- 头部 ---------- */
+function renderHeader(){
+  const master = TERMS.filter(isMaster).length;
+  $('hstat').innerHTML = '熟练 ' + master + '/' + TERMS.length + ' · 连续 ' + S.streak + ' 天';
+}
+function renderAll(){
+  $('nTot').textContent = TERMS.length;
+  renderHeader(); renderHome(); renderStudy(); renderKey(); renderList(); renderMe();
 }
 
 /* ---------- 事件 ---------- */
-$("btnReveal").onclick = () => {
-  if (state.mode === "type"){
-    const t = state.queue[state.i]; if (!t) return;
-    $("ansMain").textContent = t.en; $("ansNote").textContent = t.note || "";
-    $("answer").className = "show"; state.answered = true;
-    delete store.known[t.zh]; store.wrong[t.zh] = (store.wrong[t.zh] || 0) + 1; save(); updateStat();
-    $("btnReveal").style.display = "none"; $("btnOk").style.display = ""; $("btnOk").textContent = "下一条 ␣";
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => {
+  const v = b.dataset.v;
+  if (v === 'study'){
+    if (!Q) buildQueue();
+    go2(v);
+    if (!cur && Qpos < Q.length){ nextCard(); } else { renderStudy(); }
     return;
   }
-  reveal();
-};
-$("btnNo").onclick = () => grade(false);
-$("btnOk").onclick = () => {
-  if (state.mode === "type" || state.mode === "quiz"){ next(); return; }
-  grade(true);
-};
+  go2(v);
+});
 
-document.addEventListener("keydown", e => {
-  if (state.mode === "home" || state.mode === "list") return;
-  const typing = document.activeElement && document.activeElement.id === "tinput";
-  if (typing){
-    if (e.key === "Enter"){ e.preventDefault(); submitType(); }
-    return;
-  }
-  if (e.key === " " || e.key === "Enter"){
+document.addEventListener('keydown', e => {
+  const onStudy = $('v-study').classList.contains('on');
+  if (!onStudy) return;
+  if (!Q || !cur) return;
+  if (e.key === ' ' || e.key === 'Enter'){ e.preventDefault(); if (!revealed){ revealed = true; renderStudy(); } return; }
+  if (revealed && (e.key === '1' || e.key === '2' || e.key === '3')){
     e.preventDefault();
-    if (state.mode === "card"){ state.revealed ? next() : reveal(); }
-    else if (state.mode === "type"){ state.answered ? next() : submitType(); }
-    else { if (state.answered) next(); }
-    return;
+    gradeCur(e.key === '1' ? 'bad' : (e.key === '2' ? 'hard' : 'good'));
   }
-  if (e.key === "1"){ e.preventDefault(); if (state.mode === "card" && state.revealed) grade(false); }
-  if (e.key === "2"){ e.preventDefault(); if (state.mode === "card" && state.revealed) grade(true); }
-  if (e.key === "ArrowLeft"){ e.preventDefault(); prev(); }
 });
 
-document.querySelectorAll("#fCh .chip").forEach(c => c.onclick = () => {
-  document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
-  c.classList.add("on");
-  if (c.dataset.ch !== undefined){ state.ch = +c.dataset.ch; state.f = null; }
-  else { state.f = c.dataset.f; }
-  if (state.mode === "home") setMode("card", true); else build();
-});
-document.querySelectorAll("#fMode .chip[data-dir]").forEach(c => c.onclick = () => {
-  document.querySelectorAll("#fMode .chip[data-dir]").forEach(x => x.classList.remove("on"));
-  c.classList.add("on"); state.dir = c.dataset.dir; build();
-});
-document.querySelectorAll(".tabbar .tab").forEach(t => t.onclick = () => setMode(t.dataset.m, true));
-$("btnShuffle").onclick = () => build();
-$("btnReset").onclick = () => {
-  if (!confirm("清空掌握记录和错题本？")) return;
-  store.known = {}; store.wrong = {}; save(); build();
-};
-$("btnAgain").onclick = () => { $("btnAgain").style.display = ""; build(); };
-
-document.querySelectorAll("#fMode .chip[data-dir]")[0].classList.add("on");
-setMode("home", false);
+renderAll();
 </script>
 </body>
 </html>
