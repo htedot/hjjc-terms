@@ -194,9 +194,14 @@ function shuffle(a){
 }
 function build(shuffleIt){
   let p = pool().slice();
-  if (shuffleIt !== false) shuffle(p);
-  // 不会的优先：错一次的排前面
-  if (state.f !== "wrong") p.sort((a, b) => (store.wrong[b.zh] ? 1 : 0) - (store.wrong[a.zh] ? 1 : 0));
+  if (state.mode === "list"){
+    // 速查要按章、按课件顺序读，不能洗牌
+    p.sort((a, b) => (a.ch - b.ch) || (TERMS.indexOf(a) - TERMS.indexOf(b)));
+  } else {
+    if (shuffleIt !== false) shuffle(p);
+    // 不会的优先：错一次的排前面
+    if (state.f !== "wrong") p.sort((a, b) => (store.wrong[b.zh] ? 1 : 0) - (store.wrong[a.zh] ? 1 : 0));
+  }
   state.queue = p; state.i = 0;
   if (!p.length){ document.getElementById("stage").querySelectorAll("#answer,#acts,#quiz,#type,#front,#sub,#qtag").forEach(e => e.style.display = "none");
     document.getElementById("end").style.display = "block";
