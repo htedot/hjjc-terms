@@ -7,11 +7,13 @@
 <meta name="theme-color" content="#961e2d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="背术语">
+<meta name="mobile-web-app-capable" content="yes">
 <style>
 :root{
   --paper:#faf7f2; --ink:#1c1c1e; --gry:#6b6b70; --line:#ddd6cb;
   --acc:#961e2d; --acc-l:#f3e3e4; --grn:#1f6b45; --grn-l:#e4efe7;
   --blu:#22507a; --blu-l:#e3ecf4; --sand:#f2ece1;
+  --tabH:56px;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;padding:0}
@@ -19,87 +21,151 @@ body{
   background:var(--paper); color:var(--ink);
   font-family:"PingFang SC","Microsoft YaHei","Source Han Sans SC",system-ui,sans-serif;
   font-size:16px; line-height:1.65;
-  padding:18px 16px 40px; max-width:760px; margin:0 auto;
+  padding:14px 14px calc(var(--tabH) + 26px + env(safe-area-inset-bottom));
+  max-width:760px; margin:0 auto;
 }
-header{display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid var(--acc);padding-bottom:8px}
-h1{font-size:21px;margin:0;letter-spacing:.5px}
-h1 small{font-size:12px;color:var(--gry);font-weight:400;margin-left:6px;letter-spacing:0}
-#stat{margin-left:auto;font-size:12.5px;color:var(--gry);font-variant-numeric:tabular-nums}
-.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:10px 0 14px}
+header{display:flex;align-items:baseline;gap:8px;border-bottom:1.5px solid var(--acc);padding-bottom:7px}
+h1{font-size:19px;margin:0;letter-spacing:.4px}
+h1 small{font-size:11.5px;color:var(--gry);font-weight:400;margin-left:5px;letter-spacing:0}
+#stat{margin-left:auto;font-size:12px;color:var(--gry);font-variant-numeric:tabular-nums}
+.bar{height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin:9px 0 11px}
 .bar>i{display:block;height:100%;width:0;background:var(--acc);transition:width .25s}
 
-.ctl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.ctl{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:7px}
+#fCh{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+#fCh::-webkit-scrollbar{display:none}
 .chip{
-  font-size:13px;padding:4px 11px;border-radius:999px;border:1px solid var(--line);
+  font-size:13px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);
   background:#fff;color:var(--gry);cursor:pointer;user-select:none;transition:.15s;
+  white-space:nowrap;flex:0 0 auto;
 }
 .chip:hover{border-color:var(--acc);color:var(--acc)}
 .chip.on{background:var(--acc);border-color:var(--acc);color:#fff}
 .chip.on.grn{background:var(--grn);border-color:var(--grn)}
-.chip.on.blu{background:var(--blu);border-color:var(--blu)}
-.sep{width:1px;background:var(--line);margin:2px 4px}
+.sep{width:1px;background:var(--line);margin:2px 3px;flex:0 0 auto}
 
 #stage{
-  background:#fff;border:1px solid var(--line);border-radius:8px;
-  padding:26px 22px;min-height:250px;display:flex;flex-direction:column;
+  background:#fff;border:1px solid var(--line);border-radius:10px;
+  padding:20px 18px;min-height:236px;display:flex;flex-direction:column;
   box-shadow:0 1px 0 rgba(0,0,0,.03),0 8px 24px -18px rgba(0,0,0,.35);
 }
-.qtag{font-size:11.5px;color:var(--gry);letter-spacing:.08em;margin-bottom:10px}
+.qtag{font-size:11.5px;color:var(--gry);letter-spacing:.08em;margin-bottom:9px}
 .qtag b{color:var(--acc);font-weight:600}
-#front{font-size:30px;font-weight:650;line-height:1.35;letter-spacing:.5px;word-break:break-word}
-#front.en{font-size:27px;font-weight:600;font-family:Georgia,"Times New Roman",serif;letter-spacing:.2px}
-#sub{color:var(--gry);font-size:13.5px;margin-top:8px}
-#answer{margin-top:18px;padding-top:16px;border-top:1px dashed var(--line);display:none}
+#front{font-size:28px;font-weight:650;line-height:1.35;letter-spacing:.4px;word-break:break-word}
+#front.en{font-size:25px;font-weight:600;font-family:Georgia,"Times New Roman",serif;letter-spacing:.2px}
+#sub{color:var(--gry);font-size:13px;margin-top:7px}
+#answer{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:none}
 #answer.show{display:block}
-#ansMain{font-size:26px;font-weight:600;font-family:Georgia,"Times New Roman",serif;color:var(--blu);word-break:break-word}
-#ansMain.zh{font-family:inherit;font-size:23px;color:var(--ink)}
-#ansNote{font-size:13.5px;color:var(--gry);margin-top:8px}
-.flag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:4px;background:var(--sand);color:#8a6a2f;margin-left:8px;vertical-align:3px;font-family:inherit;font-weight:400}
+#ansMain{font-size:24px;font-weight:600;font-family:Georgia,"Times New Roman",serif;color:var(--blu);word-break:break-word}
+#ansMain.zh{font-family:inherit;font-size:21px;color:var(--ink)}
+#ansNote{font-size:13px;color:var(--gry);margin-top:7px}
+.flag{display:inline-block;font-size:11px;padding:1px 6px;border-radius:4px;background:var(--sand);color:#8a6a2f;margin-left:6px;vertical-align:2px;font-family:inherit;font-weight:400}
 
-#acts{display:flex;gap:10px;margin-top:22px}
-button{font:inherit;cursor:pointer;border-radius:7px;border:1px solid var(--line);background:#fff;padding:11px 8px;flex:1;transition:.15s}
-button:hover{border-color:#bbb}
+#acts{display:flex;gap:9px;margin-top:18px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--line);background:#fff;padding:12px 8px;flex:1;transition:.15s}
+button:active{transform:scale(.985)}
 button.main{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:600}
-button.main:hover{filter:brightness(1.07)}
 button.ok{background:var(--grn);border-color:var(--grn);color:#fff;font-weight:600}
 button.no{background:#fff;border-color:#c9b7b9;color:var(--acc);font-weight:600}
-button:disabled{opacity:.45;cursor:default}
-#hint{font-size:12px;color:var(--gry);margin-top:12px;text-align:center}
-#hint kbd{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:1px 5px;color:#444}
 
-#quiz{display:none;flex-direction:column;gap:9px;margin-top:16px}
-#list{display:none;margin-top:6px;max-height:64vh;overflow:auto;-webkit-overflow-scrolling:touch}
-#list .row{display:grid;grid-template-columns:1fr;gap:2px;padding:7px 0;border-bottom:1px solid var(--line)}
-#list .rz{font-size:13px;color:var(--ink)}
-#list .re{font-size:13px;color:var(--acc);word-break:break-word}
-#list .rn{font-size:11.5px;color:var(--muted);line-height:1.5}
-#list .flag{margin-left:0;margin-right:4px}
-#list .lh{font-size:12px;color:var(--muted);padding:2px 0 6px}
+#quiz{display:none;flex-direction:column;gap:8px;margin-top:14px}
 .opt{
-  text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:7px;background:#fff;
-  font-size:17px;font-family:Georgia,"Times New Roman",serif;line-height:1.4;
+  text-align:left;padding:13px 13px;border:1px solid var(--line);border-radius:8px;background:#fff;
+  font-size:16px;font-family:Georgia,"Times New Roman",serif;line-height:1.4;flex:none;
 }
-.opt:hover{border-color:var(--blu);background:var(--blu-l)}
 .opt.right{background:var(--grn-l);border-color:var(--grn);font-weight:600}
 .opt.wrong{background:var(--acc-l);border-color:var(--acc);text-decoration:line-through;opacity:.75}
 
-#type{display:none;margin-top:16px}
+#list{display:none;margin-top:2px;max-height:66vh;overflow:auto;-webkit-overflow-scrolling:touch}
+#list .row,#home .row{display:grid;grid-template-columns:1fr;gap:1px;padding:7px 0;border-bottom:1px solid var(--line)}
+#list .rz,#home .rz{font-size:13.5px;color:var(--ink)}
+#list .re,#home .re{font-size:13px;color:var(--acc);word-break:break-word}
+#list .rn,#home .rn{font-size:11.5px;color:var(--gry);line-height:1.5}
+#list .flag,#home .flag{margin-left:0;margin-right:4px}
+#list .lh{font-size:12px;color:var(--gry);padding:2px 0 5px}
+
+#type{display:none;margin-top:14px}
 #type input{
-  width:100%;font:inherit;font-size:19px;padding:11px 13px;border:1px solid var(--line);
-  border-radius:7px;background:#fff;font-family:Georgia,"Times New Roman",serif;
+  width:100%;font:inherit;font-size:18px;padding:11px 12px;border:1px solid var(--line);
+  border-radius:8px;background:#fff;font-family:Georgia,"Times New Roman",serif;
 }
 #type input:focus{outline:none;border-color:var(--blu);box-shadow:0 0 0 3px var(--blu-l)}
-#fb{margin-top:10px;font-size:14px;min-height:22px}
+#fb{margin-top:9px;font-size:14px;min-height:21px}
 #fb.good{color:var(--grn);font-weight:600}
 #fb.bad{color:var(--acc);font-weight:600}
-#end{display:none;text-align:center;padding:30px 10px}
-#end h2{font-size:20px;margin:0 0 6px}
-#end p{color:var(--gry);font-size:14px}
-@media (max-width:520px){
-  body{padding:14px 12px 34px}
-  #front{font-size:25px} #ansMain{font-size:22px}
-  #stage{padding:20px 16px;min-height:220px}
-  .chip{font-size:12.5px;padding:3px 9px}
+#end{display:none;text-align:center;padding:26px 8px}
+#end h2{font-size:18px;margin:0 0 5px}
+#end p{color:var(--gry);font-size:13.5px}
+
+#hint{font-size:11.5px;color:var(--gry);margin-top:10px;text-align:center}
+#hint kbd{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;background:#fff;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px;color:#444}
+#hint .kb{display:none}
+@media (hover:hover){ #hint .kb{display:inline} }
+
+/* ---------- 总览 ---------- */
+#home{display:none}
+#home .hcards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:4px}
+#home .hc{border:1px solid var(--line);border-radius:9px;padding:10px 8px;text-align:center;background:var(--paper)}
+#home .hc b{display:block;font-size:23px;line-height:1.2;font-variant-numeric:tabular-nums;color:var(--ink)}
+#home .hc span{font-size:11.5px;color:var(--gry)}
+#home .hc.acc{border-color:#e0c3c6;background:var(--acc-l)}
+#home .hc.acc b{color:var(--acc)}
+#home .hsec{font-size:12px;color:var(--acc);font-weight:700;letter-spacing:.06em;margin:16px 0 6px;
+  padding-left:7px;border-left:3px solid var(--acc);line-height:1.2}
+#home .chrow{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
+#home .chrow:last-child{border-bottom:none}
+#home .chrow .nm{font-size:13.5px;flex:1}
+#home .chrow .n{font-size:12px;color:var(--gry);font-variant-numeric:tabular-nums}
+#home .minibar{width:56px;height:5px;border-radius:3px;background:var(--line);overflow:hidden;flex:0 0 auto}
+#home .minibar i{display:block;height:100%;background:var(--grn)}
+#home .qbtn{display:flex;gap:8px;flex-wrap:wrap}
+#home .qbtn button{flex:1 1 30%;font-size:13.5px;padding:11px 6px;border-radius:9px}
+#home details{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:var(--paper);overflow:hidden}
+#home summary{padding:10px 12px;font-size:13.5px;cursor:pointer;list-style:none}
+#home summary::-webkit-details-marker{display:none}
+#home summary::before{content:"▸ ";color:var(--acc)}
+#home details[open] summary::before{content:"▾ "}
+#home details[open] summary{border-bottom:1px solid var(--line);background:#fff}
+#home .dbody{padding:0 12px 8px;background:#fff}
+#home .note{font-size:11.5px;color:var(--gry);line-height:1.6;margin-top:10px}
+
+/* ---------- 重点栏 ---------- */
+#key{display:none;margin-top:2px;max-height:66vh;overflow:auto;-webkit-overflow-scrolling:touch}
+#key .kg{font-size:12px;font-weight:700;color:var(--acc);letter-spacing:.06em;margin:14px 0 4px;
+  padding-left:7px;border-left:3px solid var(--acc);line-height:1.2}
+#key .kg:first-child{margin-top:2px}
+#key .ki{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer;align-items:flex-start}
+#key .ki .ck{flex:0 0 auto;width:17px;height:17px;margin-top:3px;border:1.5px solid var(--line);border-radius:50%;
+  font-size:11px;line-height:15px;text-align:center;color:transparent}
+#key .ki.done .ck{background:var(--grn);border-color:var(--grn);color:#fff}
+#key .ki.done .tx{color:var(--gry);text-decoration:line-through;text-decoration-thickness:1px}
+#key .ki .tx{font-size:13.5px;line-height:1.55}
+#key .ki .tx em{font-style:normal;color:var(--acc);font-weight:600}
+#key .ki .src{float:right;margin-left:10px;font-size:10.5px;color:#b6ada0;letter-spacing:.02em;line-height:1.55}
+#key .kh{font-size:12px;color:var(--gry);padding:2px 0 4px}
+#key .f{font-family:Georgia,"Times New Roman",serif;color:var(--blu);font-size:14px;word-break:break-word}
+
+/* ---------- 底部标签栏 ---------- */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;height:calc(var(--tabH) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(250,247,242,.97);border-top:1px solid var(--line);
+  display:flex;align-items:stretch;backdrop-filter:blur(8px);z-index:20;
+}
+.tabbar .tab{
+  flex:1;border:none;background:none;border-radius:0;padding:6px 0 4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  font-size:10.5px;color:var(--gry);letter-spacing:.02em;
+}
+.tabbar .tab i{font-style:normal;font-size:15px;line-height:1;opacity:.75}
+.tabbar .tab.on{color:var(--acc);font-weight:700}
+.tabbar .tab.on i{opacity:1}
+
+@media (max-width:400px){
+  body{padding-left:11px;padding-right:11px}
+  #front{font-size:25px} #ansMain{font-size:21px}
+  #stage{padding:18px 14px;min-height:210px}
+  #home .hc b{font-size:20px}
 }
 </style>
 </head>
@@ -111,29 +177,27 @@ button:disabled{opacity:.45;cursor:default}
 </header>
 <div class="bar"><i id="prog"></i></div>
 
-<div class="ctl" id="fCh">
-  <span class="chip on" data-ch="0">全部</span>
-  <span class="chip" data-ch="1">第 1 章</span>
-  <span class="chip" data-ch="2">第 2 章 水</span>
-  <span class="chip" data-ch="3">第 3 章 气</span>
-  <span class="sep"></span>
-  <span class="chip" data-f="supp">只看〔补〕</span>
-  <span class="chip grn" data-f="wrong">错题本</span>
-</div>
-<div class="ctl" id="fMode">
-  <span class="chip on" data-m="card">卡片</span>
-  <span class="chip" data-m="type">默写</span>
-  <span class="chip" data-m="quiz">四选一</span>
-  <span class="chip" data-m="list">速查</span>
-  <span class="sep"></span>
-  <span class="chip" data-dir="zh">中 → 英</span>
-  <span class="chip" data-dir="en">英 → 中</span>
-  <span class="sep"></span>
-  <span class="chip" id="btnShuffle">洗牌</span>
-  <span class="chip" id="btnReset">清零</span>
+<div id="toolbar">
+  <div class="ctl" id="fCh">
+    <span class="chip on" data-ch="0">全部</span>
+    <span class="chip" data-ch="1">第 1 章</span>
+    <span class="chip" data-ch="2">第 2 章 水</span>
+    <span class="chip" data-ch="3">第 3 章 气</span>
+    <span class="sep"></span>
+    <span class="chip" data-f="supp">只看〔补〕</span>
+    <span class="chip grn" data-f="wrong">错题本</span>
+  </div>
+  <div class="ctl" id="fMode">
+    <span class="chip on" data-dir="zh">中 → 英</span>
+    <span class="chip" data-dir="en">英 → 中</span>
+    <span class="sep"></span>
+    <span class="chip" id="btnShuffle">洗牌</span>
+    <span class="chip" id="btnReset">清零</span>
+  </div>
 </div>
 
 <div id="stage">
+  <div id="home"></div>
   <div class="qtag" id="qtag"></div>
   <div id="front"></div>
   <div id="sub"></div>
@@ -144,6 +208,7 @@ button:disabled{opacity:.45;cursor:default}
 
   <div id="quiz"></div>
   <div id="list"></div>
+  <div id="key"></div>
 
   <div id="type">
     <input id="tinput" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="打出英文，回车提交">
@@ -159,15 +224,25 @@ button:disabled{opacity:.45;cursor:default}
   <div id="end">
     <h2>这一轮走完了</h2>
     <p id="endTxt"></p>
-    <div class="ctl" style="justify-content:center;margin-top:14px">
+    <div class="ctl" style="justify-content:center;margin-top:12px">
       <span class="chip on" id="btnAgain">再来一轮</span>
     </div>
   </div>
 </div>
 
 <div id="hint">
-  <kbd>空格</kbd> 翻面 / 提交 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp; <kbd>←</kbd> 回上一条
+  <span class="kb"><kbd>空格</kbd> 翻面 / 提交 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp;</span>
+  点上方标签切换模式
 </div>
+
+<nav class="tabbar">
+  <button class="tab" data-m="home"><i>▤</i>总览</button>
+  <button class="tab" data-m="key"><i>★</i>重点</button>
+  <button class="tab" data-m="card"><i>▭</i>卡片</button>
+  <button class="tab" data-m="type"><i>⌨</i>默写</button>
+  <button class="tab" data-m="quiz"><i>◈</i>四选一</button>
+  <button class="tab" data-m="list"><i>☰</i>速查</button>
+</nav>
 
 <script>
 const TERMS = [{"zh":"环境监测","en":"Environmental Monitoring","note":"测定代表值，判断质量与趋势","ch":1,"supp":false},{"zh":"环境标准","en":"environmental standard","note":"环保工作要统一的技术规定","ch":1,"supp":true},{"zh":"环境质量标准","en":"environmental quality standard","note":"限制介质中有害物的允许含量","ch":1,"supp":true},{"zh":"污染物排放标准","en":"pollutant discharge standard","note":"管排放口浓度或总量","ch":1,"supp":true},{"zh":"环境方法标准","en":"environmental method standard","note":"管采样分析方法，保证可比","ch":1,"supp":true},{"zh":"环境标准物质标准","en":"environmental reference material standard","note":"管标准样品怎样制备定值","ch":1,"supp":true},{"zh":"环境基础标准","en":"environmental basic standard","note":"管术语、符号与指南","ch":1,"supp":true},{"zh":"环保仪器设备标准","en":"standard for environmental instruments and equipment","note":"管仪器设备技术性能","ch":1,"supp":true},{"zh":"优先污染物","en":"priority pollutant","note":"经筛选列入黑名单的污染物","ch":1,"supp":true},{"zh":"环境背景值","en":"Environment background value","note":"未受污染时的基线值","ch":1,"supp":false},{"zh":"地表水环境质量标准","en":"地表水环境质量标准（GB 3838—2002）","note":"五类水域，评价依据","ch":1,"supp":true},{"zh":"污水综合排放标准","en":"污水综合排放标准（GB 8978—1996）","note":"两类污染物、三级排放","ch":1,"supp":true},{"zh":"环境空气质量标准","en":"环境空气质量标准（GB 3095-2012）","note":"两级标准、两类地区","ch":1,"supp":true},{"zh":"国家标准","en":"national standard","note":"全国执行的最低要求","ch":1,"supp":true},{"zh":"地方标准","en":"local standard","note":"严于国标时执行它","ch":1,"supp":true},{"zh":"行业标准","en":"industry standard","note":"全行业统一执行","ch":1,"supp":true},{"zh":"监测断面","en":"Monitoring section","note":"河上横切一刀的那个面","ch":1,"supp":true},{"zh":"采样点","en":"sampling point","note":"断面上真正取水的位置","ch":1,"supp":false},{"zh":"瞬时水样","en":"Snap sample","note":"某一刻单瓶水，只代表那一刻","ch":1,"supp":false},{"zh":"混合水样","en":"Mixed sample","note":"同一点不同时刻水样合并","ch":1,"supp":false},{"zh":"综合水样","en":"Integrated sample","note":"不同点同时刻水样合并","ch":1,"supp":false},{"zh":"检出限","en":"detection limit","note":"能可靠检出的最低浓度","ch":1,"supp":true},{"zh":"准确度","en":"Good accuracy / High accuracy","note":"与真值差多少，看相对误差","ch":1,"supp":false},{"zh":"精密度","en":"Stable and high precision","note":"重复做几次散不散","ch":1,"supp":false},{"zh":"校准曲线","en":"calibration curve","note":"吸光度对浓度的那条直线","ch":1,"supp":true},{"zh":"空白试验","en":"Control test","note":"不加样品的一份，扣本底","ch":1,"supp":false},{"zh":"加标回收","en":"spike recovery","note":"加已知量测回来多少","ch":1,"supp":true},{"zh":"三致物质","en":"carcinogenic, teratogenic and mutagenic substances","note":"致癌、致畸、致突变","ch":1,"supp":true},{"zh":"水质监测","en":"Water Quality Monitoring","note":"测水体的质量与污染程度","ch":2,"supp":false},{"zh":"监测方案","en":"Water quality monitoring program","note":"定项目、断面、时间频率","ch":2,"supp":false},{"zh":"背景断面","en":"Background section","note":"几乎未受人类活动的河段","ch":2,"supp":false},{"zh":"对照断面","en":"Comparison section","note":"流入河段前的水质起点","ch":2,"supp":false},{"zh":"控制断面","en":"Control section","note":"排污口下游混匀处","ch":2,"supp":false},{"zh":"削减断面","en":"Cut-down section","note":"自净后浓度明显降低处","ch":2,"supp":false},{"zh":"垂直断面线","en":"Layout of vertical lines on a cross-section","note":"断面上按水深布垂线","ch":2,"supp":false},{"zh":"表层水","en":"Surface water","note":"水面下 0.3～0.5 m 处的水","ch":2,"supp":false},{"zh":"深层水","en":"Deep water","note":"用带重锤的采样器取","ch":2,"supp":false},{"zh":"采样器","en":"Sampler with weight","note":"沉到指定深度再开塞","ch":2,"supp":false},{"zh":"水样采集和保存","en":"Collection and preservation","note":"取样与存样两件事","ch":2,"supp":false},{"zh":"水样保存方法","en":"Preservation method","note":"冷藏、加抑制剂、调 pH","ch":2,"supp":false},{"zh":"冷藏或冷冻法","en":"Cooling treatment","note":"抑微生物、减慢反应","ch":2,"supp":false},{"zh":"化学试剂保存法","en":"Chemical inhibitor","note":"加抑制剂、氧化还原剂","ch":2,"supp":false},{"zh":"水样预处理","en":"Pretreatment of water","note":"消解、富集、分离的前处理","ch":2,"supp":false},{"zh":"消解","en":"Digestion","note":"破坏有机物，解放无机元素","ch":2,"supp":false},{"zh":"湿式消解法","en":"Wet digestion","note":"用酸消解，快而常用","ch":2,"supp":false},{"zh":"干式分解法","en":"dry decomposition","note":"干灰化，500～900 ℃ 烧","ch":2,"supp":false},{"zh":"富集","en":"Enrichment","note":"把少量物质浓缩到小体积","ch":2,"supp":true},{"zh":"分离","en":"Separation","note":"把待测组分别样析出","ch":2,"supp":true},{"zh":"溶剂萃取法","en":"Solvent extraction","note":"用有机溶剂把组分抽走","ch":2,"supp":false},{"zh":"固相萃取法","en":"Solid Phase Extraction, SPE","note":"固体萃取剂留住目标物","ch":2,"supp":false},{"zh":"离子交换法","en":"Ion exchange","note":"树脂按电荷换出离子","ch":2,"supp":false},{"zh":"共沉淀法","en":"Coprecipitation","note":"借沉淀带下痕量组分","ch":2,"supp":false},{"zh":"物理指标检验","en":"Physical parameter test","note":"水温色度浊度这些","ch":2,"supp":false},{"zh":"臭和味","en":"Odor and Taste","note":"感官指标，测臭阈值","ch":2,"supp":false},{"zh":"色度","en":"Chroma","note":"真色与表色，铂钴比色","ch":2,"supp":false},{"zh":"浊度","en":"Turbidity","note":"不溶物挡光的程度","ch":2,"supp":false},{"zh":"透明度","en":"Transparency","note":"水样的澄清程度","ch":2,"supp":false},{"zh":"固体物","en":"Solids","note":"可溶与不溶物的总称","ch":2,"supp":false},{"zh":"悬浮物","en":"（SS）","note":"滤后截留在滤器上的固体","ch":2,"supp":false},{"zh":"溶解固体物","en":"（DS）","note":"滤液蒸干后增加的重量","ch":2,"supp":false},{"zh":"矿化度","en":"Degree of mineralization","note":"水中总含盐量","ch":2,"supp":false},{"zh":"电导率","en":"Electrical conductivity","note":"溶解离子的多少","ch":2,"supp":false},{"zh":"氧化还原电位","en":"Redox potential","note":"正为氧化性，负为还原性","ch":2,"supp":false},{"zh":"溶解氧","en":"DO","note":"水里溶解的氧，现场测","ch":2,"supp":false},{"zh":"生化需氧量","en":"（BOD）","note":"微生物分解耗的氧","ch":2,"supp":false},{"zh":"化学需氧量","en":"Chemical oxygen demand (COD)","note":"化学氧化剂耗掉的氧","ch":2,"supp":false},{"zh":"高锰酸盐指数","en":"IMn","note":"高锰酸钾氧化的耗氧量","ch":2,"supp":false},{"zh":"总有机碳","en":"Total organic carbon, TOC","note":"烧出来的有机碳总量","ch":2,"supp":false},{"zh":"总需氧量","en":"Total oxygen demand, TOD","note":"全部可氧化物的需氧量","ch":2,"supp":false},{"zh":"干扰","en":"Interference","note":"别的组分让你读数偏高","ch":2,"supp":false},{"zh":"原子吸收光谱法","en":"Atomic absorption spectrum, AAS","note":"基态原子吸收特征谱线","ch":2,"supp":false},{"zh":"原子发射光谱法","en":"Atomic emission spectrum, AES","note":"受激原子放出特征光","ch":2,"supp":false},{"zh":"电感耦合等离子体","en":"Inductively coupled plasma","note":"ICP 的光源","ch":2,"supp":false},{"zh":"紫外可见吸收光谱法","en":"UV-vis","note":"分子吸收紫外可见光","ch":2,"supp":true},{"zh":"气相色谱法","en":"GC","note":"气体流动相带着样品走","ch":2,"supp":false},{"zh":"质谱法","en":"Mass spectrometry, MS","note":"按质荷比分离离子","ch":2,"supp":false},{"zh":"离子色谱法","en":"Ion chromatography, IC","note":"阴离子分析的主力","ch":2,"supp":false},{"zh":"空心阴极灯","en":"hollow cathode lamp","note":"AAS 的光源","ch":2,"supp":true},{"zh":"原子化器","en":"atomizer","note":"把样品变成基态原子","ch":2,"supp":true},{"zh":"基态原子","en":"ground state atoms","note":"能吸收共振线的那些原子","ch":2,"supp":false},{"zh":"共振线","en":"resonance line","note":"原子最常吸收的那条线","ch":2,"supp":true},{"zh":"标准加入法","en":"standard addition method","note":"基体复杂时用，样品里加标","ch":2,"supp":true},{"zh":"空气和废气监测","en":"Air and exhaust gas monitoring","note":"环境空气加烟囱废气","ch":3,"supp":false},{"zh":"空气污染","en":"Air pollution","note":"污染物进入大气造成危害","ch":3,"supp":false},{"zh":"一次污染物","en":"Primary pollutant","note":"直接排出来的那种","ch":3,"supp":false},{"zh":"二次污染物","en":"Secondary pollutant","note":"排出来以后变出来的","ch":3,"supp":false},{"zh":"降尘","en":"Dust fall","note":"粒径 >100\\,μm，易沉降","ch":3,"supp":false},{"zh":"总悬浮颗粒物","en":"Total suspended particulate matter（TSP）","note":"粒径 <100\\,μm 的全部","ch":3,"supp":false},{"zh":"可吸入颗粒物","en":"Inhalable particulate matter（PM10）","note":"粒径 <10\\,μm","ch":3,"supp":false},{"zh":"细颗粒物","en":"Fine particulate matter（PM2.5）","note":"粒径 <2.5\\,μm","ch":3,"supp":false},{"zh":"空气质量指数","en":"Air quality index, AQI","note":"无量纲，六项取最大","ch":3,"supp":false},{"zh":"布点","en":"Setting principle of monitoring section","note":"仪器放哪才代表全城","ch":3,"supp":true},{"zh":"功能区布点法","en":"Functional area setting method","note":"分区各设若干点","ch":3,"supp":false},{"zh":"网格布点法","en":"Grid setting method","note":"多源均匀分布时用","ch":3,"supp":false},{"zh":"同心圆布点法","en":"Concentric circle setting method","note":"大源集中时，绕圆布点","ch":3,"supp":false},{"zh":"扇形布点法","en":"Fan-shaped setting method","note":"孤立高架源、风向明确","ch":3,"supp":false},{"zh":"直接采样法","en":"Direct sampling method","note":"浓度高、方法灵敏时用","ch":3,"supp":false},{"zh":"富集采样法","en":"Enrichment sampling method","note":"浓度低时先把样抓住","ch":3,"supp":false},{"zh":"溶液吸收法","en":"Solution absorption method","note":"让气通过吸收液","ch":3,"supp":false},{"zh":"填充柱阻留法","en":"Column retention method","note":"吸附、分配、反应三种柱","ch":3,"supp":false},{"zh":"滤料阻留法","en":"Filter retention method","note":"颗粒物挡在滤料上","ch":3,"supp":false},{"zh":"低温冷凝法","en":"Low temperature condensation","note":"低沸点有机物冷凝下来","ch":3,"supp":false},{"zh":"静电沉降法","en":"Electrostatic sedimentation","note":"靠电场捕集颗粒物","ch":3,"supp":false},{"zh":"自然积集法","en":"Natural integration","note":"靠重力自然沉降","ch":3,"supp":false},{"zh":"采样效率","en":"Sampling efficiency","note":"采到的量占总量的百分数","ch":3,"supp":false},{"zh":"标准状态","en":"standard state","note":"273 K、101.325 kPa 的干气体","ch":3,"supp":false},{"zh":"参比状态","en":"reference state","note":"298.15 K，GB 3095 用它","ch":3,"supp":true},{"zh":"二氧化硫","en":"SO2","note":"溶液吸收或紫外荧光法测","ch":3,"supp":false},{"zh":"氮氧化物","en":"NOx","note":"分光或化学发光法测","ch":3,"supp":false},{"zh":"一氧化碳","en":"CO","note":"非色散红外吸收法","ch":3,"supp":false},{"zh":"臭氧","en":"O3","note":"与 NOx 并列的必测项","ch":3,"supp":false},{"zh":"光化学氧化剂","en":"Photochemical oxidant","note":"总氧化剂减去 0.269 倍 NOx","ch":3,"supp":false},{"zh":"硫酸盐化速率","en":"sulfation rate","note":"碱性表面吸收 SO2 的速率","ch":3,"supp":false},{"zh":"非甲烷总烃","en":"non-methyl hydrocarbons (NMHC)","note":"总烃扣掉甲烷","ch":3,"supp":false},{"zh":"挥发性有机物","en":"volatile organic compounds","note":"蒸气压大于 133.32 Pa","ch":3,"supp":false},{"zh":"切割器","en":"cutter","note":"只让小于某粒径的进来","ch":3,"supp":true},{"zh":"等速采样","en":"iso-kinetic sampling","note":"采样嘴流速等于烟气流速","ch":3,"supp":true},{"zh":"皮托管","en":"标准皮托管 / S型皮托管","note":"测全压静压，算流速","ch":3,"supp":true},{"zh":"动压","en":"dynamic pressure (Pv）","note":"单位体积气流的动能","ch":3,"supp":false},{"zh":"烟气含湿量","en":"Determination of moisture content","note":"重量、冷凝、干湿球三法","ch":3,"supp":false}];
@@ -176,17 +251,60 @@ const LS = "hjjc.terms.v2";
 const store = JSON.parse(localStorage.getItem(LS) || '{"known":{},"wrong":{},"seen":{}}');
 const save = () => localStorage.setItem(LS, JSON.stringify(store));
 
+const CHNAME = {1:"第 1 章 总论与标准", 2:"第 2 章 水和废水", 3:"第 3 章 空气和废气"};
 const hasEn = t => /[A-Za-z]/.test(t.en || "");
 const cjkCount = s => (s.match(/[\u4e00-\u9fff]/g) || []).length;
 const typeable = t => hasEn(t) && cjkCount(t.en) === 0 && t.en.length <= 45;
-const state = {ch:0, f:null, mode:"card", dir:"zh", queue:[], i:0, revealed:false, answered:false};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const state = {ch:0, f:null, mode:"home", dir:"zh", queue:[], i:0, revealed:false, answered:false};
+
+/* ---------- 重点栏（考前只背这些） ---------- */
+const KEY = [
+  {g:"数字：记住了就能填空", rows:[
+    ["河流削减断面设在排污口下游 <em>1500 m</em> 以外", "2-1"],
+    ["表层水样取<em>水面下 0.3~0.5 m</em>；深层水才用深层采样器", "2-1"],
+    ["河宽 <50 m 设 1 条垂线｜50~100 两条｜100~1500 三条｜>1500 五条", "2-1"],
+    ["水深 ≤5 m 采 1 点｜5~10 两点｜10~50 三点｜>50 五点", "2-1"],
+    ["水样保存：清洁 <em>72 h</em>、轻污染 <48 h、严重污染 <12 h", "2-2"],
+    ["测金属加 HNO<sub>3</sub> 酸化到 <em>pH 1~2</em>；测氰化物、挥发酚加 NaOH 到 <em>pH 12</em>", "2-2"],
+    ["溶解态金属要先过 <em>0.45 μm</em> 滤膜，测的是溶解态不是总量", "2-2"],
+    ["SS 烘 <em>103~105 ℃</em>；矿化度 <em>105~110 ℃</em>", "2-2"],
+    ["比色波长：氨氮 <em>420 nm</em>｜总氮 <em>220 与 275 nm</em>｜总磷 <em>700 nm</em>", "2-4"],
+    ["BOD<sub>5</sub>：<em>20±1 ℃、暗处 5 d</em>；稀释水曝气后 DO 约 8 mg/L", "2-4"],
+    ["COD<sub>Cr</sub> 回流 <em>2 h</em>｜高锰酸盐指数沸水浴 <em>30 min</em>｜TOD 燃烧 <em>900 ℃</em>", "2-4"],
+    ["扇形布点夹角 <em>45~60°</em>（小于 90°）；同心圆放射线<em>至少 5 条</em>", "3-1"]
+  ]},
+  {g:"公式：这三套年年考", rows:[
+    ["标况体积　<span class='f'>V<sub>n</sub> = V<sub>t</sub> × 273/(273+t) × P/101.325</span>", "3-1"],
+    ["颗粒物浓度　<span class='f'>c = (m<sub>2</sub>−m<sub>1</sub>) × 10<sup>6</sup> / V<sub>n</sub></span> μg/m³", "3-3"],
+    ["BOD<sub>5</sub>　<span class='f'>= [(D<sub>1</sub>−D<sub>2</sub>) − (B<sub>1</sub>−B<sub>2</sub>)f<sub>1</sub>] / f<sub>2</sub></span>", "2-4"],
+    ["烟气流速　<span class='f'>v<sub>s</sub> = K<sub>p</sub> √(2p<sub>v</sub>/ρ)</span>", "3-3"],
+    ["降尘量　<span class='f'>M = (w<sub>1</sub>−w<sub>0</sub>) × 30 × 10<sup>4</sup> / (S·n)</span> t/(km²·30d)", "3-3"]
+  ]},
+  {g:"坑：不改就丢分", rows:[
+    ["总氮用双波长，必须减两倍：<em>A = A<sub>220</sub> − 2A<sub>275</sub></em>", "2-4"],
+    ["Cl⁻ > 300 mg/L 时高锰酸盐指数要改<em>碱性法</em>，否则氯被氧化算进去", "2-4"],
+    ["测汞除了酸化还要加 <em>K₂Cr₂O₇</em> 固定（0.05%），不然汞会吸附损失", "2-2"],
+    ["BOD 培养必须<em>暗处</em>，见光藻类产氧，结果偏低", "2-4"],
+    ["判可生化性看 <em>BOD₅/COD ≈ 0.3</em>，大于 0.3 才适合生物处理", "2-4"]
+  ]},
+  {g:"英文：题干里出现就得认出来", rows:[
+    ["<em>detection limit</em>　检出限", "高频"],
+    ["<em>recovery</em>　回收率（加标回收）", "高频"],
+    ["<em>calibration curve</em>　标准曲线／工作曲线", "高频"],
+    ["<em>precision / repeatability</em>　精密度／重复性", "中频"],
+    ["<em>sampling point</em>　采样点｜<em>composite sample</em> 混合水样", "中频"],
+    ["<em>standard solution</em>　标准溶液｜<em>blank</em> 空白", "中频"]
+  ]}
+];
+const keyCount = () => KEY.reduce((n, g) => n + g.rows.length, 0);
+const keyDone = () => { const s = store.key || {}; return KEY.reduce((n, g) => n + g.rows.filter(r => s[r[0]]).length, 0); };
 
 /* ---------- 取题 ---------- */
 function pool(){
   let p = TERMS.filter(t => !state.ch || t.ch === state.ch);
   if (state.f === "supp") p = p.filter(t => t.supp);
   if (state.f === "wrong") p = p.filter(t => store.wrong[t.zh]);
-  // 中→英 / 默写 需要真英文
   if (state.mode === "type" || state.mode === "quiz") p = p.filter(typeable);
   if (state.dir === "zh") p = p.filter(hasEn);
   return p;
@@ -196,20 +314,22 @@ function shuffle(a){
   return a;
 }
 function build(shuffleIt){
+  if (state.mode === "home"){ showHome(); return; }
+  if (state.mode === "key"){ showKey(); return; }
   let p = pool().slice();
   if (state.mode === "list"){
-    // 速查要按章、按课件顺序读，不能洗牌
     p.sort((a, b) => (a.ch - b.ch) || (TERMS.indexOf(a) - TERMS.indexOf(b)));
   } else {
     if (shuffleIt !== false) shuffle(p);
-    // 不会的优先：错一次的排前面
     if (state.f !== "wrong") p.sort((a, b) => (store.wrong[b.zh] ? 1 : 0) - (store.wrong[a.zh] ? 1 : 0));
   }
   state.queue = p; state.i = 0;
-  if (!p.length){ document.getElementById("stage").querySelectorAll("#answer,#acts,#quiz,#type,#front,#sub,#qtag").forEach(e => e.style.display = "none");
-    document.getElementById("end").style.display = "block";
-    document.getElementById("endTxt").textContent = "这个筛选下没有词条。换个筛选看看。";
-    document.getElementById("end").querySelector("#btnAgain").style.display = "none";
+  if (!p.length){
+    ["answer","acts","quiz","type","front","sub","qtag"].forEach(id => $(id).style.display = "none");
+    $("end").style.display = "block";
+    $("endTxt").textContent = "这个筛选下没有词条。换个筛选看看。";
+    $("btnAgain").style.display = "none";
+    updateStat();
     return;
   }
   render();
@@ -217,17 +337,20 @@ function build(shuffleIt){
 
 /* ---------- 渲染 ---------- */
 const $ = id => document.getElementById(id);
+const GAME = ["qtag","front","sub","answer","acts","quiz","type","list","key","end","home"];
+
 function render(){
+  if (state.mode === "home"){ showHome(); return; }
+  if (state.mode === "key"){ showKey(); return; }
   if (state.mode === "list"){ showList(); return; }
-  $("list").style.display = "none";
+  $("home").style.display = "none"; $("list").style.display = "none"; $("key").style.display = "none";
   const t = state.queue[state.i];
   const isEnd = !t;
   $("end").style.display = isEnd ? "block" : "none";
   ["qtag","front","sub","answer","acts"].forEach(k => $(k).style.display = isEnd ? "none" : "");
   $("quiz").style.display = "none"; $("type").style.display = "none";
   if (isEnd){
-    const n = state.queue.length;
-    $("endTxt").textContent = `走完 ${n} 条。错题本里现有 ${Object.keys(store.wrong).length} 条。`;
+    $("endTxt").textContent = `走完 ${state.queue.length} 条。错题本里现有 ${Object.keys(store.wrong).length} 条。`;
     $("btnAgain").style.display = "";
     updateStat();
     return;
@@ -249,17 +372,108 @@ function render(){
   updateStat();
 }
 
+/* ---------- 总览 ---------- */
+function knownIn(ch){ return TERMS.filter(t => t.ch === ch && store.known[t.zh]).length; }
+function totalIn(ch){ return TERMS.filter(t => t.ch === ch).length; }
+
+function showHome(){
+  GAME.forEach(id => $(id).style.display = "none");
+  const box = $("home"); box.style.display = "block";
+  const known = Object.keys(store.known).length;
+  const wrong = Object.keys(store.wrong).length;
+  const rest = TERMS.length - known;
+  const suppN = TERMS.filter(t => t.supp).length;
+
+  let chRows = "";
+  [1,2,3].forEach(ch => {
+    const tot = totalIn(ch), k = knownIn(ch), pct = Math.round(k / tot * 100);
+    chRows += `<div class="chrow" data-ch="${ch}">
+      <div class="nm">${CHNAME[ch]}</div>
+      <div class="minibar"><i style="width:${pct}%"></i></div>
+      <div class="n">${k}/${tot}</div></div>`;
+  });
+
+  let details = "";
+  [1,2,3].forEach(ch => {
+    const rows = TERMS.filter(t => t.ch === ch).map(t =>
+      `<div class="row"><div class="rz">${t.supp ? '<span class="flag">补</span>' : ''}${esc(t.zh)}</div>` +
+      `<div class="re">${esc(t.en || "—")}</div>` +
+      (t.note ? `<div class="rn">${esc(t.note)}</div>` : "") + `</div>`).join("");
+    details += `<details><summary>${CHNAME[ch]} · ${totalIn(ch)} 条（已掌握 ${knownIn(ch)}）</summary><div class="dbody">${rows}</div></details>`;
+  });
+
+  box.innerHTML = `
+    <div class="hcards">
+      <div class="hc"><b>${known}</b><span>已掌握</span></div>
+      <div class="hc"><b>${rest}</b><span>还没记住</span></div>
+      <div class="hc acc"><b>${wrong}</b><span>错题本</span></div>
+    </div>
+    <div class="hsec">按章看（点一行就开始背这一章）</div>
+    ${chRows}
+    <div class="hsec">现在去</div>
+    <div class="qbtn">
+      <button class="main" data-go="card">接着背</button>
+      <button data-go="wrong">只刷错题${wrong ? "（" + wrong + "）" : ""}</button>
+      <button data-go="supp">只看〔补〕${suppN}</button>
+      <button data-go="key">★ 重点栏 ${keyDone()}/${keyCount()}</button>
+    </div>
+    <div class="hsec">全部 120 条（点开看）</div>
+    ${details}
+    <div class="note">考试 2026-11-17（周二）闭卷。带〔补〕的是课件没给英文原话、我按标准译法补的，答题以老师课件为准。进度只存在这台手机的浏览器里，换设备不同步。</div>`;
+
+  box.querySelectorAll(".chrow").forEach(el => el.onclick = () => {
+    const ch = +el.dataset.ch;
+    document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
+    document.querySelector(`#fCh .chip[data-ch="${ch}"]`).classList.add("on");
+    state.ch = ch; state.f = null;
+    setMode("card", true);
+  });
+  box.querySelectorAll("[data-go]").forEach(el => el.onclick = () => {
+    const go = el.dataset.go;
+    if (go === "card"){ setMode("card", true); return; }
+    if (go === "key"){ setMode("key", true); return; }
+    document.querySelectorAll("#fCh .chip").forEach(x => x.classList.remove("on"));
+    document.querySelector(`#fCh .chip[data-f="${go}"]`).classList.add("on");
+    state.f = go; state.ch = 0;
+    setMode("card", true);
+  });
+  updateStat();
+}
+
+/* ---------- 重点栏 ---------- */
+function showKey(){
+  ["qtag","front","sub","answer","acts","quiz","type","list","end","home"].forEach(k => $(k).style.display = "none");
+  const el = $("key"); el.style.display = "block";
+  const s = store.key || {};
+  let html = `<div class="kh">共 ${keyCount()} 条 · 已记 <b>${keyDone()}</b> 条（点一下划掉，记过的会存着）</div>`;
+  KEY.forEach((g, gi) => {
+    html += `<div class="kg">${esc(g.g)}</div>`;
+    g.rows.forEach((r, ri) => {
+      const k = gi + "#" + ri;
+      html += `<div class="ki${s[k] ? " done" : ""}" data-k="${k}">` +
+              `<div class="ck">✓</div><div class="tx"><span class="src">${esc(r[1])}</span>${r[0]}</div></div>`;
+    });
+  });
+  el.innerHTML = html;
+  el.querySelectorAll(".ki").forEach(n => n.onclick = () => {
+    const k = n.dataset.k;
+    store.key = store.key || {};
+    if (store.key[k]) delete store.key[k]; else store.key[k] = 1;
+    save(); n.classList.toggle("done", !!store.key[k]); updateStat();
+  });
+  updateStat();
+}
+
 /* ---------- 速查表 ---------- */
-function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function showList(){
-  $("end").style.display = "none";
+  $("home").style.display = "none"; $("end").style.display = "none"; $("key").style.display = "none";
   ["qtag","front","sub","answer","acts","quiz","type"].forEach(k => $(k).style.display = "none");
   const el = $("list"); el.style.display = "block";
   const rows = state.queue.map(t =>
     `<div class="row"><div class="rz">${t.supp ? '<span class="flag">补</span>' : ''}${esc(t.zh)}</div>` +
-    `<div class="re">${esc(t.en)}</div>` +
+    `<div class="re">${esc(t.en || "—")}</div>` +
     (t.note ? `<div class="rn">${esc(t.note)}</div>` : "") + `</div>`).join("");
-  el.innerHTML = `<div class="lh">共 ${state.queue.length} 条（按当前筛选；直接背，不用点）</div>` + rows;
+  el.innerHTML = `<div class="lh">共 ${state.queue.length} 条 · 按当前筛选</div>` + rows;
   updateStat();
 }
 
@@ -291,7 +505,6 @@ function grade(ok){
 }
 function next(){
   state.i++;
-  if (state.i >= state.queue.length){ render(); return; }
   render();
 }
 function prev(){ if (state.i > 0){ state.i--; render(); } }
@@ -303,7 +516,7 @@ function startType(t){
   $("answer").className = "";
   $("btnReveal").style.display = ""; $("btnReveal").textContent = "看答案 ␣";
   const inp = $("tinput"); inp.value = ""; $("fb").textContent = ""; $("fb").className = "";
-  setTimeout(() => inp.focus(), 30);
+  if (window.innerWidth > 600) setTimeout(() => inp.focus(), 30);
 }
 const norm = s => s.toLowerCase().replace(/[\s\-—–_.,;:()（）\[\]〔〕'’"“”]/g, "").replace(/μ/g, "u");
 function submitType(){
@@ -354,9 +567,28 @@ function startQuiz(t){
   });
 }
 
+/* ---------- 模式切换 ---------- */
+function setMode(m, rebuild){
+  state.mode = m;
+  document.querySelectorAll(".tabbar .tab").forEach(x => x.classList.toggle("on", x.dataset.m === m));
+  const immersive = (m === "home" || m === "key");
+  $("toolbar").style.display = immersive ? "none" : "";
+  $("hint").style.display = (m === "card" || m === "type" || m === "quiz") ? "" : "none";
+  const HINT = {
+    card: '<span class="kb"><kbd>空格</kbd> 翻面 &nbsp; <kbd>1</kbd> 不会 &nbsp; <kbd>2</kbd> 会了 &nbsp;</span>点上方标签切换模式',
+    type: '<span class="kb"><kbd>回车</kbd> 提交 &nbsp; <kbd>空格</kbd> 下一张 &nbsp;</span>打不出来的就点「看答案」，再选会／不会',
+    quiz: '<span class="kb"><kbd>空格</kbd> 下一题 &nbsp;</span>四条里选一条，选完自动判'
+  };
+  if (HINT[m]) $("hint").innerHTML = HINT[m];
+  if (m === "home"){ showHome(); return; }
+  if (m === "key"){ showKey(); return; }
+  if (m === "list"){ state.queue = pool().slice().sort((a,b) => (a.ch - b.ch) || (TERMS.indexOf(a) - TERMS.indexOf(b))); showList(); return; }
+  build(rebuild !== false);
+}
+
 /* ---------- 事件 ---------- */
 $("btnReveal").onclick = () => {
-  if (state.mode === "type"){ // 看答案 = 直接判不会
+  if (state.mode === "type"){
     const t = state.queue[state.i]; if (!t) return;
     $("ansMain").textContent = t.en; $("ansNote").textContent = t.note || "";
     $("answer").className = "show"; state.answered = true;
@@ -368,12 +600,12 @@ $("btnReveal").onclick = () => {
 };
 $("btnNo").onclick = () => grade(false);
 $("btnOk").onclick = () => {
-  if (state.mode === "type"){ next(); return; }
-  if (state.mode === "quiz"){ next(); return; }
+  if (state.mode === "type" || state.mode === "quiz"){ next(); return; }
   grade(true);
 };
 
 document.addEventListener("keydown", e => {
+  if (state.mode === "home" || state.mode === "list") return;
   const typing = document.activeElement && document.activeElement.id === "tinput";
   if (typing){
     if (e.key === "Enter"){ e.preventDefault(); submitType(); }
@@ -396,16 +628,13 @@ document.querySelectorAll("#fCh .chip").forEach(c => c.onclick = () => {
   c.classList.add("on");
   if (c.dataset.ch !== undefined){ state.ch = +c.dataset.ch; state.f = null; }
   else { state.f = c.dataset.f; }
-  build();
-});
-document.querySelectorAll("#fMode .chip[data-m]").forEach(c => c.onclick = () => {
-  document.querySelectorAll("#fMode .chip[data-m]").forEach(x => x.classList.remove("on"));
-  c.classList.add("on"); state.mode = c.dataset.m; build(false);
+  if (state.mode === "home") setMode("card", true); else build();
 });
 document.querySelectorAll("#fMode .chip[data-dir]").forEach(c => c.onclick = () => {
   document.querySelectorAll("#fMode .chip[data-dir]").forEach(x => x.classList.remove("on"));
   c.classList.add("on"); state.dir = c.dataset.dir; build();
 });
+document.querySelectorAll(".tabbar .tab").forEach(t => t.onclick = () => setMode(t.dataset.m, true));
 $("btnShuffle").onclick = () => build();
 $("btnReset").onclick = () => {
   if (!confirm("清空掌握记录和错题本？")) return;
@@ -414,7 +643,7 @@ $("btnReset").onclick = () => {
 $("btnAgain").onclick = () => { $("btnAgain").style.display = ""; build(); };
 
 document.querySelectorAll("#fMode .chip[data-dir]")[0].classList.add("on");
-build();
+setMode("home", false);
 </script>
 </body>
 </html>
